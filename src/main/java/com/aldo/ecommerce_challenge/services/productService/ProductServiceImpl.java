@@ -2,11 +2,13 @@ package com.aldo.ecommerce_challenge.services.productService;
 
 import com.aldo.ecommerce_challenge.models.Product;
 import com.aldo.ecommerce_challenge.repositories.ProductRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class ProductServiceImpl implements ProductService {
   private final ProductRepository repository;
 
