@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class OrderServiceImpl implements OrderItemService {
+public class OrderItemServiceImpl implements OrderItemService {
   private final OrderItemRepository repository;
 
-  public OrderServiceImpl(OrderItemRepository repository) {
+  public OrderItemServiceImpl(OrderItemRepository repository) {
     this.repository = repository;
   }
 
