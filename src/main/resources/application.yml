@@ -1,4 +1,10 @@
 spring:
   application:
     name: ecommerce-challenge
-  
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: none
+  sql:
+    init:
+      mode: always
