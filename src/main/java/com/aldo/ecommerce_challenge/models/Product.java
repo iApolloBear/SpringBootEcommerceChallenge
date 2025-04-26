@@ -2,6 +2,8 @@ package com.aldo.ecommerce_challenge.models;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "products")
 public class Product {
@@ -9,9 +11,13 @@ public class Product {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(nullable = false)
   private String name;
+
   private String description;
-  private Double price;
+
+  @Column(nullable = false)
+  private BigDecimal price;
 
   public Long getId() {
     return id;
@@ -37,11 +43,11 @@ public class Product {
     this.description = description;
   }
 
-  public Double getPrice() {
+  public BigDecimal getPrice() {
     return price;
   }
 
-  public void setPrice(Double price) {
+  public void setPrice(BigDecimal price) {
     this.price = price;
   }
 }
