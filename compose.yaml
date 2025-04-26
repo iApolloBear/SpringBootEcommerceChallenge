@@ -1,9 +1,12 @@
 services:
-  postgres:
-    image: 'postgres:latest'
+  postgresql16:
+    container_name: postgres16
+    image: 'postgres:16.2'
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      POSTGRES_DB: ecommerce
+      POSTGRES_PASSWORD: 53cR3T@
     ports:
-      - '5432'
+      - '5432:5432'
+    restart: always
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
