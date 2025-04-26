@@ -5,6 +5,7 @@ import com.aldo.ecommerce_challenge.products.models.Product;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 @Table(name = "order_items")
@@ -25,7 +26,24 @@ public class OrderItem {
   private Integer quantity;
 
   @Column(nullable = false)
-  private BigDecimal price;
+  private BigDecimal price = new BigDecimal(0);
+
+  public OrderItem() {}
+
+  public OrderItem(Order order, Product product, Integer quantity) {
+    this.order = order;
+    this.product = product;
+    this.quantity = quantity;
+    this.price = this.calculatePrice();
+  }
+
+  public OrderItem(Long id, Order order, Product product, Integer quantity) {
+    this.id = id;
+    this.order = order;
+    this.product = product;
+    this.quantity = quantity;
+    this.price = this.calculatePrice();
+  }
 
   public Long getId() {
     return id;
@@ -65,5 +83,26 @@ public class OrderItem {
 
   public void setPrice(BigDecimal price) {
     this.price = price;
+  }
+
+  private BigDecimal calculatePrice() {
+    return this.product.getPrice().multiply(BigDecimal.valueOf(this.getQuantity()));
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) return true;
+    if (object == null || getClass() != object.getClass()) return false;
+    OrderItem orderItem = (OrderItem) object;
+    return Objects.equals(id, orderItem.id)
+        && Objects.equals(order, orderItem.order)
+        && Objects.equals(product, orderItem.product)
+        && Objects.equals(quantity, orderItem.quantity)
+        && Objects.equals(price, orderItem.price);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, order, product, quantity, price);
   }
 }

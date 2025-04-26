@@ -32,7 +32,7 @@ public class OrderRepositoryTest {
 
   @Test
   public void testSave() {
-    Order order = new Order(new ArrayList<>());
+    Order order = new Order();
     Order orderDb = this.orderRepository.save(order);
     assertEquals("0", orderDb.getTotal().toPlainString());
     assertEquals(0, orderDb.getOrderItems().size());

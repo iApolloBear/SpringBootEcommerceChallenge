@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "orders")
@@ -25,17 +26,6 @@ public class Order {
   private List<OrderItem> orderItems = new ArrayList<>();
 
   public Order() {}
-
-  public Order(Long id, List<OrderItem> orderItems) {
-    this.id = id;
-    this.orderItems = orderItems;
-    calculateTotal();
-  }
-
-  public Order(List<OrderItem> orderItems) {
-    this.orderItems = orderItems;
-    calculateTotal();
-  }
 
   public Long getId() {
     return id;
@@ -72,11 +62,28 @@ public class Order {
   public void addItem(OrderItem item) {
     this.orderItems.add(item);
     item.setOrder(this);
-    calculateTotal();
+    this.total = this.calculateTotal();
   }
 
-  private void calculateTotal() {
-    this.total =
-        this.orderItems.stream().map(OrderItem::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+  private BigDecimal calculateTotal() {
+    return this.orderItems.stream()
+        .map(OrderItem::getPrice)
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) return true;
+    if (object == null || getClass() != object.getClass()) return false;
+    Order order = (Order) object;
+    return Objects.equals(id, order.id)
+        && Objects.equals(createdAt, order.createdAt)
+        && Objects.equals(total, order.total)
+        && Objects.equals(orderItems, order.orderItems);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, createdAt, total);
   }
 }
