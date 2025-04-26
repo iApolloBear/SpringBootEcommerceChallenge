@@ -1,7 +1,7 @@
-package com.aldo.ecommerce_challenge.controller;
+package com.aldo.ecommerce_challenge.products.controllers;
 
-import com.aldo.ecommerce_challenge.models.Product;
-import com.aldo.ecommerce_challenge.services.productService.ProductService;
+import com.aldo.ecommerce_challenge.products.models.Product;
+import com.aldo.ecommerce_challenge.products.services.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package com.aldo.ecommerce_challenge.models;
+package com.aldo.ecommerce_challenge.products.models;
 
 import jakarta.persistence.*;
 

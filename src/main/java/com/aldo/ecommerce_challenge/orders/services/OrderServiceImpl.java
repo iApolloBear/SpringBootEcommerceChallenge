@@ -1,8 +1,8 @@
-package com.aldo.ecommerce_challenge.services.orderService;
+package com.aldo.ecommerce_challenge.orders.services;
 
-import com.aldo.ecommerce_challenge.models.Order;
-import com.aldo.ecommerce_challenge.models.OrderItem;
-import com.aldo.ecommerce_challenge.repositories.OrderRepository;
+import com.aldo.ecommerce_challenge.orders.models.Order;
+import com.aldo.ecommerce_challenge.orderItems.models.OrderItem;
+import com.aldo.ecommerce_challenge.orders.repositories.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

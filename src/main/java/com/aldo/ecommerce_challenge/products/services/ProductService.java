@@ -1,6 +1,6 @@
-package com.aldo.ecommerce_challenge.services.productService;
+package com.aldo.ecommerce_challenge.products.services;
 
-import com.aldo.ecommerce_challenge.models.Product;
+import com.aldo.ecommerce_challenge.products.models.Product;
 
 import java.util.List;
 import java.util.Optional;

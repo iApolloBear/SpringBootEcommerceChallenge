@@ -1,7 +1,7 @@
-package com.aldo.ecommerce_challenge.services.productService;
+package com.aldo.ecommerce_challenge.products.services;
 
-import com.aldo.ecommerce_challenge.models.Product;
-import com.aldo.ecommerce_challenge.repositories.ProductRepository;
+import com.aldo.ecommerce_challenge.products.models.Product;
+import com.aldo.ecommerce_challenge.products.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

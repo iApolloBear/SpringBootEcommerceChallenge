@@ -1,7 +1,7 @@
-package com.aldo.ecommerce_challenge.services.orderItemService;
+package com.aldo.ecommerce_challenge.orderItems.services;
 
-import com.aldo.ecommerce_challenge.models.OrderItem;
-import com.aldo.ecommerce_challenge.repositories.OrderItemRepository;
+import com.aldo.ecommerce_challenge.orderItems.models.OrderItem;
+import com.aldo.ecommerce_challenge.orderItems.repositories.OrderItemRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,5 +1,7 @@
-package com.aldo.ecommerce_challenge.models;
+package com.aldo.ecommerce_challenge.orderItems.models;
 
+import com.aldo.ecommerce_challenge.orders.models.Order;
+import com.aldo.ecommerce_challenge.products.models.Product;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
