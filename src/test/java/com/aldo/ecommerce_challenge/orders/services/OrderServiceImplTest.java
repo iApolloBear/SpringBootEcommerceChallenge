@@ -5,7 +5,6 @@ import com.aldo.ecommerce_challenge.orders.OrdersData;
 import com.aldo.ecommerce_challenge.orders.models.Order;
 import com.aldo.ecommerce_challenge.orders.repositories.OrderRepository;
 import com.aldo.ecommerce_challenge.products.ProductsData;
-import com.aldo.ecommerce_challenge.products.models.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -55,7 +54,6 @@ public class OrderServiceImplTest {
   void testSave() {
     Order newOrder = new Order();
     OrderItem orderItem = new OrderItem(newOrder, ProductsData.createProductOne().orElseThrow(), 1);
-    newOrder.addItem(orderItem);
     when(this.orderRepository.save(any()))
         .then(
             invocation -> {
@@ -63,7 +61,7 @@ public class OrderServiceImplTest {
               o.setId(3L);
               return o;
             });
-    Order order = this.orderService.save(newOrder);
+    Order order = this.orderService.save(List.of(orderItem));
     assertEquals(3, order.getId());
     assertEquals(1, order.getOrderItems().size());
     assertEquals("938", order.getTotal().toPlainString());
@@ -78,14 +76,14 @@ public class OrderServiceImplTest {
     Order newOrder = new Order();
     OrderItem orderItem = new OrderItem(newOrder, ProductsData.createProductTwo().orElseThrow(), 2);
     newOrder.addItem(orderItem);
-    when(this.orderRepository.save(any(Order.class)))
+    when(this.orderRepository.save(any()))
         .then(
             invocation -> {
               Order o = invocation.getArgument(0);
               o.setId(1L);
               return o;
             });
-    Optional<Order> result = this.orderService.update(1L, newOrder);
+    Optional<Order> result = this.orderService.update(1L, List.of(orderItem));
     assertTrue(result.isPresent());
     assertEquals(1, result.get().getId());
     assertEquals("2998", result.get().getTotal().toPlainString());

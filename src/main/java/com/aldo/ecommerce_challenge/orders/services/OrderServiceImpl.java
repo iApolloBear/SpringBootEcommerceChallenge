@@ -28,22 +28,21 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public Order save(Order order) {
+  public Order save(List<OrderItem> orderItems) {
+    Order order = new Order();
+    if (!orderItems.isEmpty()) {
+      order.setOrderItems(orderItems);
+    }
     return this.repository.save(order);
   }
 
   @Override
-  public Optional<Order> update(Long id, Order order) {
+  public Optional<Order> update(Long id, List<OrderItem> orderItems) {
     return this.repository
         .findById(id)
         .map(
             orderDb -> {
-              orderDb.setCreatedAt(order.getCreatedAt());
-              orderDb.setOrderItems(order.getOrderItems());
-              orderDb.setTotal(
-                  order.getOrderItems().stream()
-                      .map(OrderItem::getPrice)
-                      .reduce(BigDecimal.ZERO, BigDecimal::add));
+              orderDb.setOrderItems(orderItems);
               return this.repository.save(orderDb);
             });
   }

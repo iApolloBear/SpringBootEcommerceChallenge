@@ -1,5 +1,6 @@
 package com.aldo.ecommerce_challenge.orders.services;
 
+import com.aldo.ecommerce_challenge.orderItems.models.OrderItem;
 import com.aldo.ecommerce_challenge.orders.models.Order;
 
 import java.util.List;
@@ -10,9 +11,9 @@ public interface OrderService {
 
   Optional<Order> findById(Long id);
 
-  Order save(Order order);
+  Order save(List<OrderItem> orderItems);
 
-  Optional<Order> update(Long id, Order order);
+  Optional<Order> update(Long id, List<OrderItem> orderItems);
 
   Optional<Order> delete(Long id);
 }

@@ -57,6 +57,7 @@ public class Order {
 
   public void setOrderItems(List<OrderItem> orderItems) {
     this.orderItems = orderItems;
+    this.total = this.calculateTotal();
   }
 
   public void addItem(OrderItem item) {

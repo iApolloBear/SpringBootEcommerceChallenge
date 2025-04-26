@@ -18,8 +18,8 @@ public class ProductController {
   }
 
   @GetMapping
-  public List<Product> getAll() {
-    return this.productService.findAll();
+  public ResponseEntity<List<Product>> getAll() {
+    return ResponseEntity.ok(this.productService.findAll());
   }
 
   @GetMapping("/{id}")
