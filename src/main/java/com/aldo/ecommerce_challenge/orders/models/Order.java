@@ -19,13 +19,22 @@ public class Order {
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Column(nullable = false)
-  private BigDecimal total;
+  private BigDecimal total = new BigDecimal(0);
 
   @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<OrderItem> orderItems = new ArrayList<>();
 
-  public Order() {
-    this.orderItems = new ArrayList<>();
+  public Order() {}
+
+  public Order(Long id, List<OrderItem> orderItems) {
+    this.id = id;
+    this.orderItems = orderItems;
+    calculateTotal();
+  }
+
+  public Order(List<OrderItem> orderItems) {
+    this.orderItems = orderItems;
+    calculateTotal();
   }
 
   public Long getId() {
@@ -58,5 +67,16 @@ public class Order {
 
   public void setOrderItems(List<OrderItem> orderItems) {
     this.orderItems = orderItems;
+  }
+
+  public void addItem(OrderItem item) {
+    this.orderItems.add(item);
+    item.setOrder(this);
+    calculateTotal();
+  }
+
+  private void calculateTotal() {
+    this.total =
+        this.orderItems.stream().map(OrderItem::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 }
