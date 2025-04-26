@@ -1,6 +1,11 @@
 spring:
   application:
     name: ecommerce-challenge
+  datasource:
+    url: jdbc://postgresql://localhost:5432/ecommerce
+    username: postgres
+    password: 53cR3T@
+    driver-class-name: org.postgresql.Driver
   jpa:
     defer-datasource-initialization: true
     hibernate:
