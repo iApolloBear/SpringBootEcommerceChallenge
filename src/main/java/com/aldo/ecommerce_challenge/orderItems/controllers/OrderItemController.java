@@ -1,0 +1,38 @@
+package com.aldo.ecommerce_challenge.orderItems.controllers;
+
+import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemCreateUpdateDTO;
+import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemDTO;
+import com.aldo.ecommerce_challenge.orderItems.services.OrderItemService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/order-items")
+public class OrderItemController {
+  private final OrderItemService orderItemService;
+
+  public OrderItemController(OrderItemService orderItemService) {
+    this.orderItemService = orderItemService;
+  }
+
+  @GetMapping
+  public ResponseEntity<List<OrderItemDTO>> getAll() {
+    return ResponseEntity.ok(this.orderItemService.findAll());
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<OrderItemDTO> getById(@PathVariable Long id) {
+    return this.orderItemService
+        .findById(id)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
+  }
+
+  @PostMapping
+  public ResponseEntity<OrderItemDTO> create(@RequestBody OrderItemCreateUpdateDTO orderItem) {
+    return ResponseEntity.status(HttpStatus.CREATED).body(this.orderItemService.save(orderItem));
+  }
+}
