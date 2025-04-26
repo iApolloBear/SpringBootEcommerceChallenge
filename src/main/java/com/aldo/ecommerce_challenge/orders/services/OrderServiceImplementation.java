@@ -1,43 +1,38 @@
-package com.aldo.ecommerce_challenge.services.orderService;
+package com.aldo.ecommerce_challenge.orders.services;
 
-import com.aldo.ecommerce_challenge.models.Order;
-import com.aldo.ecommerce_challenge.models.OrderItem;
-import com.aldo.ecommerce_challenge.repositories.OrderRepository;
+import com.aldo.ecommerce_challenge.orders.models.Order;
+import com.aldo.ecommerce_challenge.orderItems.models.OrderItem;
+import com.aldo.ecommerce_challenge.orders.repositories.OrderRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class OrdersServiceImplementation implements OrderService {
+public class OrderServiceImplementation implements OrderService {
   private final OrderRepository repository;
 
-  public OrdersServiceImplementation(OrderRepository repository) {
+  public OrderServiceImplementation(OrderRepository repository) {
     this.repository = repository;
   }
 
   @Override
-  @Transactional(readOnly = true)
   public List<Order> findAll() {
     return (List<Order>) this.repository.findAll();
   }
 
   @Override
-  @Transactional(readOnly = true)
   public Optional<Order> findById(Long id) {
     return this.repository.findById(id);
   }
 
   @Override
-  @Transactional
   public Order save(Order order) {
     return this.repository.save(order);
   }
 
   @Override
-  @Transactional
   public Optional<Order> update(Long id, Order order) {
     return this.repository
         .findById(id)
@@ -54,7 +49,6 @@ public class OrdersServiceImplementation implements OrderService {
   }
 
   @Override
-  @Transactional
   public Optional<Order> delete(Long id) {
     return repository
         .findById(id)
