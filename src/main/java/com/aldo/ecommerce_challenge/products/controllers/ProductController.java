@@ -1,6 +1,7 @@
 package com.aldo.ecommerce_challenge.products.controllers;
 
-import com.aldo.ecommerce_challenge.products.dto.ProductCreateUpdateDTO;
+import com.aldo.ecommerce_challenge.products.dto.ProductCreateDTO;
+import com.aldo.ecommerce_challenge.products.dto.ProductUpdateDTO;
 import com.aldo.ecommerce_challenge.products.models.Product;
 import com.aldo.ecommerce_challenge.products.services.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,13 +35,12 @@ public class ProductController {
   }
 
   @PostMapping
-  public ResponseEntity<Product> create(@RequestBody ProductCreateUpdateDTO dto) {
+  public ResponseEntity<Product> create(@RequestBody ProductCreateDTO dto) {
     return ResponseEntity.status(HttpStatus.CREATED).body(this.productService.save(dto));
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Product> update(
-      @PathVariable Long id, @RequestBody ProductCreateUpdateDTO dto) {
+  public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody ProductUpdateDTO dto) {
     return this.productService
         .update(id, dto)
         .map(ResponseEntity::ok)

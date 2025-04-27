@@ -1,7 +1,8 @@
 package com.aldo.ecommerce_challenge.products.controllers;
 
 import com.aldo.ecommerce_challenge.products.ProductsData;
-import com.aldo.ecommerce_challenge.products.dto.ProductCreateUpdateDTO;
+import com.aldo.ecommerce_challenge.products.dto.ProductCreateDTO;
+import com.aldo.ecommerce_challenge.products.dto.ProductUpdateDTO;
 import com.aldo.ecommerce_challenge.products.mappers.ProductMapper;
 import com.aldo.ecommerce_challenge.products.mappers.ProductMapperImpl;
 import com.aldo.ecommerce_challenge.products.models.Product;
@@ -73,8 +74,8 @@ public class ProductControllerTest {
 
   @Test
   public void create() throws Exception {
-    ProductCreateUpdateDTO product =
-        new ProductCreateUpdateDTO("Dummy", "Portishead Album", new BigDecimal("799.33"));
+    ProductCreateDTO product =
+        new ProductCreateDTO("Dummy", "Portishead Album", new BigDecimal("799.33"));
     when(this.productService.save(any())).thenReturn(this.mapper.toProduct(product));
 
     mvc.perform(
@@ -91,9 +92,16 @@ public class ProductControllerTest {
 
   @Test
   public void update() throws Exception {
-    ProductCreateUpdateDTO dto =
-        new ProductCreateUpdateDTO("SOUR", "Olivia Rodrigo Album", new BigDecimal("800"));
-    Product newProduct = new Product(1L, dto.getName(), dto.getDescription(), dto.getPrice());
+    ProductUpdateDTO dto = new ProductUpdateDTO();
+    dto.setName(Optional.of("SOUR"));
+    dto.setDescription(Optional.of("Olivia Rodrigo Album"));
+    dto.setPrice(Optional.of(new BigDecimal("800")));
+    Product newProduct =
+        new Product(
+            1L,
+            dto.getName().orElse(null),
+            dto.getDescription().orElse(null),
+            dto.getPrice().orElse(null));
     when(this.productService.update(1L, dto)).thenReturn(Optional.of(newProduct));
 
     mvc.perform(
