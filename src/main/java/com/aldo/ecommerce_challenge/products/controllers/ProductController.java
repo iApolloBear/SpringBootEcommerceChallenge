@@ -3,6 +3,7 @@ package com.aldo.ecommerce_challenge.products.controllers;
 import com.aldo.ecommerce_challenge.products.dto.ProductCreateUpdateDTO;
 import com.aldo.ecommerce_challenge.products.models.Product;
 import com.aldo.ecommerce_challenge.products.services.ProductService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
+@Tag(name = "Products", description = "Operations related to products")
 public class ProductController {
   private final ProductService productService;
 
