@@ -1,60 +1,68 @@
 package com.aldo.ecommerce_challenge.orders.services;
 
+import com.aldo.ecommerce_challenge.orderItems.mappers.OrderItemMapper;
+import com.aldo.ecommerce_challenge.orders.dto.OrderCreateUpdateDTO;
+import com.aldo.ecommerce_challenge.orders.dto.OrderDTO;
+import com.aldo.ecommerce_challenge.orders.mappers.OrderMapper;
 import com.aldo.ecommerce_challenge.orders.models.Order;
 import com.aldo.ecommerce_challenge.orderItems.models.OrderItem;
 import com.aldo.ecommerce_challenge.orders.repositories.OrderRepository;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-  private final OrderRepository repository;
+  private final OrderRepository orderRepository;
+  private final OrderMapper orderMapper;
+  private final OrderItemMapper orderItemMapper;
 
-  public OrderServiceImpl(OrderRepository repository) {
-    this.repository = repository;
+  public OrderServiceImpl(
+      OrderRepository orderRepository, OrderMapper orderMapper, OrderItemMapper orderItemMapper) {
+    this.orderRepository = orderRepository;
+    this.orderMapper = orderMapper;
+    this.orderItemMapper = orderItemMapper;
   }
 
   @Override
-  public List<Order> findAll() {
-    return (List<Order>) this.repository.findAll();
+  public List<OrderDTO> findAll() {
+    return StreamSupport.stream(this.orderRepository.findAll().spliterator(), false)
+        .map(this.orderMapper::toDto)
+        .toList();
   }
 
   @Override
-  public Optional<Order> findById(Long id) {
-    return this.repository.findById(id);
+  public Optional<OrderDTO> findById(Long id) {
+    return this.orderRepository.findById(id).map(this.orderMapper::toDto);
   }
 
   @Override
-  public Order save(List<OrderItem> orderItems) {
-    Order order = new Order();
-    if (!orderItems.isEmpty()) {
-      order.setOrderItems(orderItems);
-    }
-    return this.repository.save(order);
+  public OrderDTO save() {
+    return this.orderMapper.toDto(this.orderRepository.save(new Order()));
   }
 
   @Override
-  public Optional<Order> update(Long id, List<OrderItem> orderItems) {
-    return this.repository
+  public Optional<OrderDTO> update(Long id, OrderCreateUpdateDTO dto) {
+    return this.orderRepository
         .findById(id)
         .map(
-            orderDb -> {
-              orderDb.setOrderItems(orderItems);
-              return this.repository.save(orderDb);
+            order -> {
+              order.setOrderItems(
+                  dto.getOrderItems().stream().map(this.orderItemMapper::toOrderItem).toList());
+              return this.orderMapper.toDto(this.orderRepository.save(order));
             });
   }
 
   @Override
-  public Optional<Order> delete(Long id) {
-    return repository
+  public Optional<OrderDTO> delete(Long id) {
+    return orderRepository
         .findById(id)
         .map(
-            product -> {
-              this.repository.delete(product);
-              return product;
+            order -> {
+              this.orderRepository.delete(order);
+              return this.orderMapper.toDto(order);
             });
   }
 }

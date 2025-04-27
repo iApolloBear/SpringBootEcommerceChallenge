@@ -1,6 +1,9 @@
 package com.aldo.ecommerce_challenge.orders.controllers;
 
+import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemCreateUpdateDTO;
 import com.aldo.ecommerce_challenge.orderItems.models.OrderItem;
+import com.aldo.ecommerce_challenge.orders.dto.OrderCreateUpdateDTO;
+import com.aldo.ecommerce_challenge.orders.dto.OrderDTO;
 import com.aldo.ecommerce_challenge.orders.models.Order;
 import com.aldo.ecommerce_challenge.orders.services.OrderService;
 import com.aldo.ecommerce_challenge.products.models.Product;
@@ -20,12 +23,12 @@ public class OrderController {
   }
 
   @GetMapping
-  public ResponseEntity<List<Order>> getAll() {
+  public ResponseEntity<List<OrderDTO>> getAll() {
     return ResponseEntity.ok(this.orderService.findAll());
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Order> getById(@PathVariable Long id) {
+  public ResponseEntity<OrderDTO> getById(@PathVariable Long id) {
     return this.orderService
         .findById(id)
         .map(ResponseEntity::ok)
@@ -33,21 +36,21 @@ public class OrderController {
   }
 
   @PostMapping
-  public ResponseEntity<Order> create(@RequestBody List<OrderItem> orderItems) {
-    return ResponseEntity.status(HttpStatus.CREATED).body(this.orderService.save(orderItems));
+  public ResponseEntity<OrderDTO> create() {
+    return ResponseEntity.status(HttpStatus.CREATED).body(this.orderService.save());
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Order> update(
-      @PathVariable Long id, @RequestBody List<OrderItem> orderItems) {
+  public ResponseEntity<OrderDTO> update(
+      @PathVariable Long id, @RequestBody OrderCreateUpdateDTO dto) {
     return this.orderService
-        .update(id, orderItems)
+        .update(id, dto)
         .map(ResponseEntity::ok)
         .orElse(ResponseEntity.notFound().build());
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Order> delete(@PathVariable Long id) {
+  public ResponseEntity<OrderDTO> delete(@PathVariable Long id) {
     return this.orderService
         .delete(id)
         .map(ResponseEntity::ok)

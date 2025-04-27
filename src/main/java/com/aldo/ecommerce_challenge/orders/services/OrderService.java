@@ -1,19 +1,21 @@
 package com.aldo.ecommerce_challenge.orders.services;
 
 import com.aldo.ecommerce_challenge.orderItems.models.OrderItem;
+import com.aldo.ecommerce_challenge.orders.dto.OrderCreateUpdateDTO;
+import com.aldo.ecommerce_challenge.orders.dto.OrderDTO;
 import com.aldo.ecommerce_challenge.orders.models.Order;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface OrderService {
-  List<Order> findAll();
+  List<OrderDTO> findAll();
 
-  Optional<Order> findById(Long id);
+  Optional<OrderDTO> findById(Long id);
 
-  Order save(List<OrderItem> orderItems);
+  OrderDTO save();
 
-  Optional<Order> update(Long id, List<OrderItem> orderItems);
+  Optional<OrderDTO> update(Long id, OrderCreateUpdateDTO dto);
 
-  Optional<Order> delete(Long id);
+  Optional<OrderDTO> delete(Long id);
 }
