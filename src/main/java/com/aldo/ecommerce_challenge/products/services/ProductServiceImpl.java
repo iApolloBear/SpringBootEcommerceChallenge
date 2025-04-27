@@ -1,5 +1,8 @@
 package com.aldo.ecommerce_challenge.products.services;
 
+import com.aldo.ecommerce_challenge.products.dto.ProductCreateUpdateDTO;
+import com.aldo.ecommerce_challenge.products.mappers.ProductCreateUpdateMapper;
+import com.aldo.ecommerce_challenge.products.mappers.ProductCreateUpdateMapperImpl;
 import com.aldo.ecommerce_challenge.products.models.Product;
 import com.aldo.ecommerce_challenge.products.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -11,6 +14,7 @@ import java.util.Optional;
 @Service
 public class ProductServiceImpl implements ProductService {
   private final ProductRepository repository;
+  private final ProductCreateUpdateMapper mapper = new ProductCreateUpdateMapperImpl();
 
   public ProductServiceImpl(ProductRepository repository) {
     this.repository = repository;
@@ -30,19 +34,19 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   @Transactional
-  public Product save(Product product) {
-    return this.repository.save(product);
+  public Product save(ProductCreateUpdateDTO dto) {
+    return this.repository.save(this.mapper.toProduct(dto));
   }
 
   @Override
-  public Optional<Product> update(Long id, Product product) {
+  public Optional<Product> update(Long id, ProductCreateUpdateDTO dto) {
     return repository
         .findById(id)
         .map(
             productDb -> {
-              productDb.setName(product.getName());
-              productDb.setDescription(product.getDescription());
-              productDb.setPrice(product.getPrice());
+              productDb.setName(dto.getName());
+              productDb.setDescription(dto.getDescription());
+              productDb.setPrice(dto.getPrice());
               return this.repository.save(productDb);
             });
   }

@@ -1,5 +1,6 @@
 package com.aldo.ecommerce_challenge.products.services;
 
+import com.aldo.ecommerce_challenge.products.dto.ProductCreateUpdateDTO;
 import com.aldo.ecommerce_challenge.products.models.Product;
 
 import java.util.List;
@@ -10,9 +11,9 @@ public interface ProductService {
 
   Optional<Product> findById(Long id);
 
-  Product save(Product product);
+  Product save(ProductCreateUpdateDTO dto);
 
-  Optional<Product> update(Long id, Product product);
+  Optional<Product> update(Long id, ProductCreateUpdateDTO dto);
 
   Optional<Product> delete(Long id);
 }

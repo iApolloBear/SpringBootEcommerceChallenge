@@ -1,6 +1,8 @@
 package com.aldo.ecommerce_challenge.products.services;
 
 import com.aldo.ecommerce_challenge.products.ProductsData;
+import com.aldo.ecommerce_challenge.products.mappers.ProductCreateUpdateMapper;
+import com.aldo.ecommerce_challenge.products.mappers.ProductCreateUpdateMapperImpl;
 import com.aldo.ecommerce_challenge.products.models.Product;
 import com.aldo.ecommerce_challenge.products.repositories.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,7 @@ import static org.mockito.Mockito.*;
 class ProductServiceImplTest {
   @MockitoBean ProductRepository productRepository;
   @Autowired ProductService productService;
+  private final ProductCreateUpdateMapper mapper = new ProductCreateUpdateMapperImpl();
 
   @Test
   void findAll() {
@@ -58,7 +61,7 @@ class ProductServiceImplTest {
               p.setId(3L);
               return p;
             });
-    Product product = this.productService.save(rush);
+    Product product = this.productService.save(this.mapper.toDto(rush));
     assertEquals("RUSH!", product.getName());
     assertEquals("Maneskin Album", product.getDescription());
     assertEquals("585.58", product.getPrice().toPlainString());
@@ -73,7 +76,7 @@ class ProductServiceImplTest {
     assertTrue(product.isPresent());
     Product newProduct = new Product(2L, "Stoney", "Post Malone Album", new BigDecimal("877.68"));
     when(this.productRepository.save(any(Product.class))).thenReturn(newProduct);
-    Optional<Product> result = this.productService.update(2L, newProduct);
+    Optional<Product> result = this.productService.update(2L, this.mapper.toDto(newProduct));
     assertTrue(result.isPresent());
     assertEquals("Stoney", result.get().getName());
     assertEquals("Post Malone Album", result.get().getDescription());

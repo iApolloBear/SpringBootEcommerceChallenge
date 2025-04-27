@@ -1,5 +1,6 @@
 package com.aldo.ecommerce_challenge.products.controllers;
 
+import com.aldo.ecommerce_challenge.products.dto.ProductCreateUpdateDTO;
 import com.aldo.ecommerce_challenge.products.models.Product;
 import com.aldo.ecommerce_challenge.products.services.ProductService;
 import org.springframework.http.HttpStatus;
@@ -31,14 +32,15 @@ public class ProductController {
   }
 
   @PostMapping
-  public ResponseEntity<Product> create(@RequestBody Product product) {
-    return ResponseEntity.status(HttpStatus.CREATED).body(this.productService.save(product));
+  public ResponseEntity<Product> create(@RequestBody ProductCreateUpdateDTO dto) {
+    return ResponseEntity.status(HttpStatus.CREATED).body(this.productService.save(dto));
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product) {
+  public ResponseEntity<Product> update(
+      @PathVariable Long id, @RequestBody ProductCreateUpdateDTO dto) {
     return this.productService
-        .update(id, product)
+        .update(id, dto)
         .map(ResponseEntity::ok)
         .orElse(ResponseEntity.notFound().build());
   }
