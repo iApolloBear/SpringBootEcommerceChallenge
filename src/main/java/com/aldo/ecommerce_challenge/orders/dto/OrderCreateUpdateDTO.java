@@ -1,37 +1,21 @@
 package com.aldo.ecommerce_challenge.orders.dto;
 
+import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemDTO;
+
+import java.util.List;
+
 public class OrderCreateUpdateDTO {
-  private Integer quantity;
-  private Long orderId;
-  private Long productId;
+  private List<OrderItemDTO> orderItems;
 
-  public OrderCreateUpdateDTO(Integer quantity, Long orderId, Long productId) {
-    this.quantity = quantity;
-    this.orderId = orderId;
-    this.productId = productId;
+  public OrderCreateUpdateDTO(List<OrderItemDTO> orderItems) {
+    this.orderItems = orderItems;
   }
 
-  public Integer getQuantity() {
-    return quantity;
+  public List<OrderItemDTO> getOrderItems() {
+    return orderItems;
   }
 
-  public void setQuantity(Integer quantity) {
-    this.quantity = quantity;
-  }
-
-  public Long getOrderId() {
-    return orderId;
-  }
-
-  public void setOrderId(Long orderId) {
-    this.orderId = orderId;
-  }
-
-  public Long getProductId() {
-    return productId;
-  }
-
-  public void setProductId(Long productId) {
-    this.productId = productId;
+  public void setOrderItems(List<OrderItemDTO> orderItems) {
+    this.orderItems = orderItems;
   }
 }

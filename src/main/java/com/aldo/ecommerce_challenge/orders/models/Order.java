@@ -16,16 +16,16 @@ public class Order {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "created_at", nullable = false)
-  private LocalDateTime createdAt = LocalDateTime.now();
-
   @Column(nullable = false)
-  private BigDecimal total = new BigDecimal(0);
+  private BigDecimal total;
 
   @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<OrderItem> orderItems = new ArrayList<>();
+  private List<OrderItem> orderItems;
 
-  public Order() {}
+  public Order() {
+    this.total = BigDecimal.ZERO;
+    this.orderItems = new ArrayList<>();
+  }
 
   public Long getId() {
     return id;
@@ -33,14 +33,6 @@ public class Order {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(LocalDateTime createdAt) {
-    this.createdAt = createdAt;
   }
 
   public BigDecimal getTotal() {
@@ -66,6 +58,12 @@ public class Order {
     this.total = this.calculateTotal();
   }
 
+  public void removeItem(OrderItem item) {
+    this.orderItems.remove(item);
+    item.setOrder(null);
+    this.total = this.calculateTotal();
+  }
+
   private BigDecimal calculateTotal() {
     return this.orderItems.stream()
         .map(OrderItem::getPrice)
@@ -78,13 +76,12 @@ public class Order {
     if (object == null || getClass() != object.getClass()) return false;
     Order order = (Order) object;
     return Objects.equals(id, order.id)
-        && Objects.equals(createdAt, order.createdAt)
         && Objects.equals(total, order.total)
         && Objects.equals(orderItems, order.orderItems);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, createdAt, total);
+    return Objects.hash(id, total);
   }
 }
