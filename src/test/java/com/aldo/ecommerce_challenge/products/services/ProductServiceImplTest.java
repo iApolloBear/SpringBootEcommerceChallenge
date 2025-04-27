@@ -1,8 +1,8 @@
 package com.aldo.ecommerce_challenge.products.services;
 
 import com.aldo.ecommerce_challenge.products.ProductsData;
-import com.aldo.ecommerce_challenge.products.mappers.ProductCreateUpdateMapper;
-import com.aldo.ecommerce_challenge.products.mappers.ProductCreateUpdateMapperImpl;
+import com.aldo.ecommerce_challenge.products.mappers.ProductMapper;
+import com.aldo.ecommerce_challenge.products.mappers.ProductMapperImpl;
 import com.aldo.ecommerce_challenge.products.models.Product;
 import com.aldo.ecommerce_challenge.products.repositories.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 class ProductServiceImplTest {
   @MockitoBean ProductRepository productRepository;
   @Autowired ProductService productService;
-  private final ProductCreateUpdateMapper mapper = new ProductCreateUpdateMapperImpl();
+  private final ProductMapper mapper = new ProductMapperImpl();
 
   @Test
   void findAll() {

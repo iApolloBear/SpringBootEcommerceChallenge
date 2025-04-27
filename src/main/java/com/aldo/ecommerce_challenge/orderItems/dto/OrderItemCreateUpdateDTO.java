@@ -1,5 +1,7 @@
 package com.aldo.ecommerce_challenge.orderItems.dto;
 
+import java.util.Objects;
+
 public class OrderItemCreateUpdateDTO {
   private Long orderId;
   private Long productId;
@@ -35,5 +37,20 @@ public class OrderItemCreateUpdateDTO {
 
   public void setQuantity(Integer quantity) {
     this.quantity = quantity;
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) return true;
+    if (object == null || getClass() != object.getClass()) return false;
+    OrderItemCreateUpdateDTO that = (OrderItemCreateUpdateDTO) object;
+    return Objects.equals(orderId, that.orderId)
+        && Objects.equals(productId, that.productId)
+        && Objects.equals(quantity, that.quantity);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(orderId, productId, quantity);
   }
 }

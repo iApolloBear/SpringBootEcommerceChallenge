@@ -35,4 +35,21 @@ public class OrderItemController {
   public ResponseEntity<OrderItemDTO> create(@RequestBody OrderItemCreateUpdateDTO orderItem) {
     return ResponseEntity.status(HttpStatus.CREATED).body(this.orderItemService.save(orderItem));
   }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<OrderItemDTO> update(
+      @PathVariable Long id, @RequestBody OrderItemCreateUpdateDTO dto) {
+    return this.orderItemService
+        .update(id, dto)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<OrderItemDTO> delete(@PathVariable Long id) {
+    return this.orderItemService
+        .delete(id)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
+  }
 }

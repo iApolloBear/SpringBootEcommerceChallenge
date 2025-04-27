@@ -3,7 +3,7 @@ package com.aldo.ecommerce_challenge.products.mappers;
 import com.aldo.ecommerce_challenge.products.dto.ProductCreateUpdateDTO;
 import com.aldo.ecommerce_challenge.products.models.Product;
 
-public class ProductCreateUpdateMapperImpl implements ProductCreateUpdateMapper {
+public class ProductMapperImpl implements ProductMapper {
   @Override
   public ProductCreateUpdateDTO toDto(Product product) {
     return new ProductCreateUpdateDTO(

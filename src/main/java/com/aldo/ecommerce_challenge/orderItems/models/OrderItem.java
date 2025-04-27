@@ -103,6 +103,6 @@ public class OrderItem {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, order, product, quantity, price);
+    return Objects.hash(id, product, quantity, price);
   }
 }

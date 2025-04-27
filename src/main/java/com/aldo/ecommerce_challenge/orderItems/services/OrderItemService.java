@@ -14,7 +14,7 @@ public interface OrderItemService {
 
   OrderItemDTO save(OrderItemCreateUpdateDTO orderItem);
 
-  Optional<OrderItem> update(Long id, OrderItemCreateUpdateDTO orderItem);
+  Optional<OrderItemDTO> update(Long id, OrderItemCreateUpdateDTO orderItem);
 
-  Optional<OrderItem> delete(Long id);
+  Optional<OrderItemDTO> delete(Long id);
 }

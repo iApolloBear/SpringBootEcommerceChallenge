@@ -2,10 +2,9 @@ package com.aldo.ecommerce_challenge.products.controllers;
 
 import com.aldo.ecommerce_challenge.products.ProductsData;
 import com.aldo.ecommerce_challenge.products.dto.ProductCreateUpdateDTO;
-import com.aldo.ecommerce_challenge.products.mappers.ProductCreateUpdateMapper;
-import com.aldo.ecommerce_challenge.products.mappers.ProductCreateUpdateMapperImpl;
+import com.aldo.ecommerce_challenge.products.mappers.ProductMapper;
+import com.aldo.ecommerce_challenge.products.mappers.ProductMapperImpl;
 import com.aldo.ecommerce_challenge.products.models.Product;
-import com.aldo.ecommerce_challenge.products.repositories.ProductRepository;
 import com.aldo.ecommerce_challenge.products.services.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProductControllerTest {
   @Autowired private MockMvc mvc;
   @MockitoBean private ProductService productService;
-  private final ProductCreateUpdateMapper mapper = new ProductCreateUpdateMapperImpl();
+  private final ProductMapper mapper = new ProductMapperImpl();
   ObjectMapper objectMapper;
 
   @BeforeEach
