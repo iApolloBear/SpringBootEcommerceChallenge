@@ -4,6 +4,9 @@ import com.aldo.ecommerce_challenge.products.dto.ProductCreateDTO;
 import com.aldo.ecommerce_challenge.products.dto.ProductUpdateDTO;
 import com.aldo.ecommerce_challenge.products.models.Product;
 import com.aldo.ecommerce_challenge.products.services.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +24,23 @@ public class ProductController {
     this.productService = productService;
   }
 
+  @Operation(
+      summary = "Find all products",
+      description = "Get all products in the database.",
+      responses = {@ApiResponse(responseCode = "200", description = "List of products")})
   @GetMapping
   public ResponseEntity<List<Product>> getAll() {
     return ResponseEntity.ok(this.productService.findAll());
   }
 
+  @Operation(
+      summary = "Find a product by ID",
+      description = "Retrieve a product by its ID.",
+      parameters = {@Parameter(name = "id", description = "Product ID", required = true)},
+      responses = {
+        @ApiResponse(responseCode = "200", description = "Product found"),
+        @ApiResponse(responseCode = "404", description = "Product not found")
+      })
   @GetMapping("/{id}")
   public ResponseEntity<Product> getById(@PathVariable Long id) {
     return this.productService
@@ -34,11 +49,27 @@ public class ProductController {
         .orElse(ResponseEntity.notFound().build());
   }
 
+  @Operation(
+      summary = "Create a new product",
+      description = "Add a new product to the database.",
+      responses = {
+        @ApiResponse(responseCode = "201", description = "Product created"),
+        @ApiResponse(responseCode = "400", description = "Invalid input data")
+      })
   @PostMapping
   public ResponseEntity<Product> create(@RequestBody ProductCreateDTO dto) {
     return ResponseEntity.status(HttpStatus.CREATED).body(this.productService.save(dto));
   }
 
+  @Operation(
+      summary = "Update an existing product",
+      description = "Update fields of an existing product by ID.",
+      parameters = {@Parameter(name = "id", description = "Product ID", required = true)},
+      responses = {
+        @ApiResponse(responseCode = "200", description = "Product updated"),
+        @ApiResponse(responseCode = "400", description = "Invalid input data"),
+        @ApiResponse(responseCode = "404", description = "Product not found")
+      })
   @PutMapping("/{id}")
   public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody ProductUpdateDTO dto) {
     return this.productService
@@ -47,6 +78,14 @@ public class ProductController {
         .orElse(ResponseEntity.notFound().build());
   }
 
+  @Operation(
+      summary = "Delete a product",
+      description = "Delete a product by ID.",
+      parameters = {@Parameter(name = "id", description = "Product ID", required = true)},
+      responses = {
+        @ApiResponse(responseCode = "200", description = "Product deleted"),
+        @ApiResponse(responseCode = "404", description = "Product not found")
+      })
   @DeleteMapping("/{id}")
   public ResponseEntity<Product> delete(@PathVariable Long id) {
     return this.productService

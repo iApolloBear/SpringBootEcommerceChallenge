@@ -4,8 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.Optional;
 
+@Schema(name = "ProductCreateDTO", description = "DTO used to create a new product")
 public class ProductUpdateDTO {
   @Schema(description = "New name for the product (optional)", example = "SOUR")
   private String name;
