@@ -1,2 +1,2 @@
 INSERT INTO products (name, description, price) VALUES ('GUTS', 'Olivia Rodrigo Album', 938), ('F-1 Trillion', 'Post Malone Album', 1499);
-INSERT INTO orders (created_at, total) VALUES ('2025-04-26 08:38:39.392175+00', 938), ('2025-04-27 08:38:59.399513+00', 2437)
+INSERT INTO orders (total) VALUES (938), (2437)
