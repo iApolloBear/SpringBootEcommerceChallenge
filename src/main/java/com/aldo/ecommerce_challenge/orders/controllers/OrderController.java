@@ -1,6 +1,6 @@
 package com.aldo.ecommerce_challenge.orders.controllers;
 
-import com.aldo.ecommerce_challenge.orders.dto.OrderCreateUpdateDTO;
+import com.aldo.ecommerce_challenge.orders.dto.OrderUpdateDTO;
 import com.aldo.ecommerce_challenge.orders.dto.OrderDTO;
 import com.aldo.ecommerce_challenge.orders.services.OrderService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,7 +40,7 @@ public class OrderController {
 
   @PutMapping("/{id}")
   public ResponseEntity<OrderDTO> update(
-      @PathVariable Long id, @RequestBody OrderCreateUpdateDTO dto) {
+      @PathVariable Long id, @RequestBody OrderUpdateDTO dto) {
     return this.orderService
         .update(id, dto)
         .map(ResponseEntity::ok)

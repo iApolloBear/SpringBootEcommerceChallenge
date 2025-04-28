@@ -4,6 +4,7 @@ import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 public class OrderDTO {
   private Long id;
