@@ -40,6 +40,7 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
+  @Transactional
   public Optional<Product> update(Long id, ProductUpdateDTO dto) {
     return repository
         .findById(id)
@@ -61,6 +62,7 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
+  @Transactional
   public Optional<Product> delete(Long id) {
     return repository
         .findById(id)

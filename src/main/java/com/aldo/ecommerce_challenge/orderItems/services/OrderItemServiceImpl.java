@@ -118,6 +118,7 @@ public class OrderItemServiceImpl implements OrderItemService {
   }
 
   @Override
+  @Transactional
   public Optional<OrderItemDTO> delete(Long id) {
     return this.orderItemRepository
         .findById(id)
