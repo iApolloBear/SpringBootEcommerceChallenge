@@ -1,4 +1,4 @@
-package com.aldo.ecommerce_challenge.products.controllers;
+package com.aldo.ecommerce_challenge.products.handlers;
 
 import com.aldo.ecommerce_challenge.products.exceptions.ProductNotFoundException;
 import com.aldo.ecommerce_challenge.shared.models.ErrorResponse;

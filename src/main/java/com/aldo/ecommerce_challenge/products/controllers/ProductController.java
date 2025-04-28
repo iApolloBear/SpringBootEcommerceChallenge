@@ -9,8 +9,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,7 +58,7 @@ public class ProductController {
         @ApiResponse(responseCode = "201", description = "Product created"),
       })
   @PostMapping
-  public ResponseEntity<Product> create(@RequestBody ProductCreateDTO dto) {
+  public ResponseEntity<Product> create(@Valid @RequestBody ProductCreateDTO dto) {
     return ResponseEntity.status(HttpStatus.CREATED).body(this.productService.save(dto));
   }
 

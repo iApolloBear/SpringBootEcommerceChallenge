@@ -1,4 +1,7 @@
 package com.aldo.ecommerce_challenge.shared.models;
 
-public class ErrorResponseWithMessages {
-}
+import java.time.LocalDateTime;
+import java.util.List;
+
+public record ErrorResponseWithMessages(
+    LocalDateTime timestamp, int status, String error, List<String> messages, String path) {}

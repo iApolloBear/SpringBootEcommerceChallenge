@@ -1,4 +1,4 @@
-package com.aldo.ecommerce_challenge.shared.controllers;
+package com.aldo.ecommerce_challenge.shared.handlers;
 
 import com.aldo.ecommerce_challenge.shared.models.ErrorResponseWithMessages;
 import jakarta.servlet.http.HttpServletRequest;
