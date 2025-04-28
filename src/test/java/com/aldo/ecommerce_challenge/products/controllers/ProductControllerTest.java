@@ -9,6 +9,7 @@ import com.aldo.ecommerce_challenge.products.models.Product;
 import com.aldo.ecommerce_challenge.products.services.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -33,7 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProductControllerTest {
   @Autowired private MockMvc mvc;
   @MockitoBean private ProductService productService;
-  private final ProductMapper mapper = new ProductMapperImpl();
   ObjectMapper objectMapper;
 
   @BeforeEach
@@ -41,91 +41,171 @@ public class ProductControllerTest {
     objectMapper = new ObjectMapper();
   }
 
-  //  @Test
-  //  public void getAll() throws Exception {
-  //    List<Product> products =
-  //        Arrays.asList(
-  //            ProductsData.createProductOne().orElseThrow(),
-  //            ProductsData.createProductTwo().orElseThrow());
-  //    when(this.productService.findAll()).thenReturn(products);
-  //    mvc.perform(get("/api/products").contentType(MediaType.APPLICATION_JSON))
-  //        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-  //        .andExpect(jsonPath("$[0].name").value("GUTS"))
-  //        .andExpect(jsonPath("$[1].name").value("F-1 Trillion"))
-  //        .andExpect(jsonPath("$[0].price").value("938"))
-  //        .andExpect(jsonPath("$[1].price").value("1499"))
-  //        .andExpect(jsonPath("$[0].description").value("Olivia Rodrigo Album"))
-  //        .andExpect(jsonPath("$[1].description").value("Post Malone Album"))
-  //        .andExpect(jsonPath("$", hasSize(2)))
-  //        .andExpect(content().json(objectMapper.writeValueAsString(products)));
-  //  }
-  //
-  //  @Test
-  //  public void getById() throws Exception {
-  //    when(this.productService.findById(1L)).thenReturn(ProductsData.createProductOne());
-  //
-  //    mvc.perform(get("/api/products/1").contentType(MediaType.APPLICATION_JSON))
-  //        .andExpect(status().isOk())
-  //        .andExpect(jsonPath("$.name").value("GUTS"))
-  //        .andExpect(jsonPath("$.description").value("Olivia Rodrigo Album"))
-  //        .andExpect(jsonPath("$.price").value("938"));
-  //    verify(this.productService).findById(1L);
-  //  }
-  //
-  //  @Test
-  //  public void create() throws Exception {
-  //    ProductCreateDTO product =
-  //        new ProductCreateDTO("Dummy", "Portishead Album", new BigDecimal("799.33"));
-  //    when(this.productService.save(any())).thenReturn(this.mapper.toProduct(product));
-  //
-  //    mvc.perform(
-  //            post("/api/products")
-  //                .contentType(MediaType.APPLICATION_JSON)
-  //                .content(objectMapper.writeValueAsString(product)))
-  //        .andExpect(status().isCreated())
-  //        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-  //        .andExpect(jsonPath("$.name", is("Dummy")))
-  //        .andExpect(jsonPath("$.description", is("Portishead Album")))
-  //        .andExpect(jsonPath("$.price", is(799.33)));
-  //    verify(this.productService).save(any());
-  //  }
-  //
-  //  @Test
-  //  public void update() throws Exception {
-  //    ProductUpdateDTO dto = new ProductUpdateDTO();
-  //    dto.setName(Optional.of("SOUR"));
-  //    dto.setDescription(Optional.of("Olivia Rodrigo Album"));
-  //    dto.setPrice(Optional.of(new BigDecimal("800")));
-  //    Product newProduct =
-  //        new Product(
-  //            1L,
-  //            dto.getName().orElse(null),
-  //            dto.getDescription().orElse(null),
-  //            dto.getPrice().orElse(null));
-  //    when(this.productService.update(1L, dto)).thenReturn(Optional.of(newProduct));
-  //
-  //    mvc.perform(
-  //            put("/api/products/1")
-  //                .contentType(MediaType.APPLICATION_JSON)
-  //                .content(objectMapper.writeValueAsString(dto)))
-  //        .andExpect(status().isOk())
-  //        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-  //        .andExpect(jsonPath("$.id", is(1)))
-  //        .andExpect(jsonPath("$.name", is("SOUR")))
-  //        .andExpect(jsonPath("$.description", is("Olivia Rodrigo Album")))
-  //        .andExpect(jsonPath("$.price", is(800)));
-  //    verify(this.productService).update(1L, dto);
-  //  }
-  //
-  //  @Test
-  //  public void delete() throws Exception {
-  //    when(this.productService.delete(2L)).thenReturn(ProductsData.createProductTwo());
-  //
-  //    mvc.perform(MockMvcRequestBuilders.delete("/api/products/2"))
-  //        .andExpect(status().isOk())
-  //        .andExpect(jsonPath("$.id").value(2))
-  //        .andExpect(jsonPath("$.name").value("F-1 Trillion"))
-  //        .andExpect(jsonPath("$.description").value("Post Malone Album"))
-  //        .andExpect(jsonPath("$.price").value(1499));
-  //  }
+  @Test
+  @DisplayName("Should return all products successfully")
+  public void testGetAll() throws Exception {
+    Product product1 = ProductsData.createProductOne().orElseThrow();
+    Product product2 = ProductsData.createProductOne().orElseThrow();
+    List<Product> products = Arrays.asList(product1, product2);
+    when(this.productService.findAll()).thenReturn(products);
+    mvc.perform(get("/api/products"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$[0].name").value(product1.getName()))
+        .andExpect(jsonPath("$[1].name").value(product2.getName()))
+        .andExpect(jsonPath("$[0].price").value(product1.getPrice()))
+        .andExpect(jsonPath("$[1].price").value(product2.getPrice()))
+        .andExpect(jsonPath("$[0].description").value(product1.getDescription()))
+        .andExpect(jsonPath("$[1].description").value(product2.getDescription()))
+        .andExpect(jsonPath("$", hasSize(2)))
+        .andExpect(content().json(objectMapper.writeValueAsString(products)));
+    verify(this.productService).findAll();
+  }
+
+  @Test
+  @DisplayName("Should return a product by ID if found")
+  public void testGetById() throws Exception {
+    Product product = ProductsData.createProductOne().orElseThrow();
+    when(this.productService.findById(1L)).thenReturn(Optional.of(product));
+
+    mvc.perform(get("/api/products/{id}", 1L))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.name").value(product.getName()))
+        .andExpect(jsonPath("$.description").value(product.getDescription()))
+        .andExpect(jsonPath("$.price").value(product.getPrice()));
+    verify(this.productService).findById(1L);
+  }
+
+  @Test
+  @DisplayName("Should return 404 when product by ID not found")
+  void testGetProductByIdNotFound() throws Exception {
+    when(productService.findById(1L)).thenReturn(Optional.empty());
+
+    mvc.perform(get("/api/products/{id}", 1L)).andExpect(status().isNotFound());
+
+    verify(this.productService).findById(1L);
+  }
+
+  @Test
+  @DisplayName("Should create a new product successfully")
+  void testCreateProduct() throws Exception {
+    ProductCreateDTO dto =
+        new ProductCreateDTO("Dummy", "Portishead Album", new BigDecimal("799.33"));
+    Product product = ProductsData.createProductOne().orElseThrow();
+    when(productService.save(dto)).thenReturn(product);
+
+    mvc.perform(
+            post("/api/products")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.id").value(product.getId()))
+        .andExpect(jsonPath("$.name").value(product.getName()))
+        .andExpect(jsonPath("$.description").value(product.getDescription()))
+        .andExpect(jsonPath("$.price").value(product.getPrice()));
+    verify(this.productService).save(dto);
+  }
+
+  @Test
+  @DisplayName("Should not create a new product")
+  void testCreateProductWithInvalidDTO() throws Exception {
+    ProductCreateDTO dto = new ProductCreateDTO();
+    Product product = ProductsData.createProductOne().orElseThrow();
+    when(productService.save(dto)).thenReturn(product);
+
+    mvc.perform(
+            post("/api/products")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+        .andExpect(status().isBadRequest());
+    verify(this.productService, never()).save(dto);
+  }
+
+  @Test
+  @DisplayName("Should update an existing product successfully if found")
+  void testUpdateProductFound() throws Exception {
+    ProductUpdateDTO dto =
+        new ProductUpdateDTO("SOUR", "Olivia Rodrigo Album", new BigDecimal("800"));
+    Product product = ProductsData.createProductOne().orElseThrow();
+
+    when(productService.update(1L, dto)).thenReturn(Optional.of(product));
+
+    mvc.perform(
+            put("/api/products/{id}", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value(product.getId()))
+        .andExpect(jsonPath("$.name").value(product.getName()))
+        .andExpect(jsonPath("$.description").value(product.getDescription()))
+        .andExpect(jsonPath("$.price").value(product.getPrice()));
+
+    verify(this.productService).update(1L, dto);
+  }
+
+  @Test
+  @DisplayName("Should update only one field of an existing product successfully if found")
+  void testUpdateOneFieldProductFound() throws Exception {
+    ProductUpdateDTO dto = new ProductUpdateDTO();
+    dto.setName("SOUR");
+    Product product = ProductsData.createProductOne().orElseThrow();
+    product.setName(dto.getName());
+
+    when(productService.update(1L, dto)).thenReturn(Optional.of(product));
+
+    mvc.perform(
+            put("/api/products/{id}", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value(product.getId()))
+        .andExpect(jsonPath("$.name").value("SOUR"))
+        .andExpect(jsonPath("$.description").value(product.getDescription()))
+        .andExpect(jsonPath("$.price").value(product.getPrice()));
+
+    verify(this.productService).update(1L, dto);
+  }
+
+  @Test
+  @DisplayName("Should return 404 when updating a non-existing product")
+  void testUpdateProductNotFound() throws Exception {
+    ProductUpdateDTO dto =
+        new ProductUpdateDTO("SOUR", "Olivia Rodrigo Album", new BigDecimal("800"));
+
+    when(productService.update(1L, dto)).thenReturn(Optional.empty());
+
+    mvc.perform(
+            put("/api/products/{id}", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+        .andExpect(status().isNotFound());
+
+    verify(this.productService).update(1L, dto);
+  }
+
+  @Test
+  @DisplayName("Should delete an existing product successfully")
+  void testDeleteProductFound() throws Exception {
+    Product product = ProductsData.createProductTwo().orElseThrow();
+
+    when(productService.delete(2L)).thenReturn(Optional.of(product));
+
+    mvc.perform(delete("/api/products/{id}", 2L))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value(product.getId()))
+        .andExpect(jsonPath("$.name").value(product.getName()))
+        .andExpect(jsonPath("$.description").value(product.getDescription()))
+        .andExpect(jsonPath("$.price").value(product.getPrice()));
+
+    verify(this.productService).delete(2L);
+  }
+
+  @Test
+  @DisplayName("Should return 404 when deleting a non-existing product")
+  void testDeleteProductNotFound() throws Exception {
+    when(productService.delete(1L)).thenReturn(Optional.empty());
+
+    mvc.perform(delete("/api/products/{id}", 1L)).andExpect(status().isNotFound());
+
+    verify(this.productService).delete(1L);
+  }
 }

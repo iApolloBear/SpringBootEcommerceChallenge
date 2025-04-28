@@ -58,7 +58,7 @@ class ProductServiceImplTest {
 
   @Test
   @DisplayName("Should save a new product")
-  void save() {
+  void testSave() {
     Product product = new Product("RUSH!", "Maneskin Album", new BigDecimal("585.58"));
     ProductCreateDTO dto =
         new ProductCreateDTO(product.getName(), product.getDescription(), product.getPrice());
@@ -80,7 +80,7 @@ class ProductServiceImplTest {
 
   @Test
   @DisplayName("Should update an existing product")
-  void update() {
+  void testUpdate() {
     when(this.productRepository.findById(2L)).thenReturn(ProductsData.createProductTwo());
     Optional<Product> product = this.productService.findById(2L);
     assertTrue(product.isPresent());
@@ -102,7 +102,7 @@ class ProductServiceImplTest {
 
   @Test
   @DisplayName("Should delete a product")
-  void delete() {
+  void testDelete() {
     when(this.productRepository.findById(1L)).thenReturn(ProductsData.createProductOne());
     Optional<Product> product = this.productService.findById(1L);
     assertTrue(product.isPresent());
