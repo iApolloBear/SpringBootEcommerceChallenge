@@ -92,6 +92,15 @@ public class OrderItemServiceImpl implements OrderItemService {
 
               if (orderItemDto.getQuantity() != null) {
                 Order order = orderItemDb.getOrder();
+
+                if (orderItemDto.getQuantity() <= 0) {
+                  this.orderItemRepository.delete(orderItemDb);
+                  OrderItemDTO result = this.orderItemMapper.toOrderItemDto(orderItemDb);
+                  order.removeItem(orderItemDb);
+                  this.orderRepository.save(order);
+                  return result;
+                }
+
                 order.setTotal(order.getTotal().subtract(orderItemDb.getPrice()));
                 orderItemDb.setQuantity(orderItemDto.getQuantity());
                 orderItemDb.setPrice(
