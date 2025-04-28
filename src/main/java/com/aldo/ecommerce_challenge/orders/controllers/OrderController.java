@@ -2,6 +2,7 @@ package com.aldo.ecommerce_challenge.orders.controllers;
 
 import com.aldo.ecommerce_challenge.orders.dto.OrderUpdateDTO;
 import com.aldo.ecommerce_challenge.orders.dto.OrderDTO;
+import com.aldo.ecommerce_challenge.orders.exceptions.OrderNotFoundException;
 import com.aldo.ecommerce_challenge.orders.services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -43,7 +44,7 @@ public class OrderController {
     return this.orderService
         .findById(id)
         .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+        .orElseThrow(() -> new OrderNotFoundException(id));
   }
 
   @Operation(
@@ -71,7 +72,7 @@ public class OrderController {
     return this.orderService
         .update(id, dto)
         .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+        .orElseThrow(() -> new OrderNotFoundException(id));
   }
 
   @Operation(
@@ -86,6 +87,6 @@ public class OrderController {
     return this.orderService
         .delete(id)
         .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+        .orElseThrow(() -> new OrderNotFoundException(id));
   }
 }
