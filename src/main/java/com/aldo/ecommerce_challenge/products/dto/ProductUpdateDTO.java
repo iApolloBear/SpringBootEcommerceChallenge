@@ -1,6 +1,9 @@
 package com.aldo.ecommerce_challenge.products.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -11,12 +14,16 @@ import java.util.Objects;
         "DTO used to update an existing product. This DTO allows you to modify the product's name, description, and price.")
 public class ProductUpdateDTO {
   @Schema(description = "New name for the product (optional)", example = "SOUR")
+  @Size(min = 3, message = "Product name must be at least 3 characters long.")
   private String name;
 
-  @Schema(description = "New description for the product (optional)", example = "Olivia Rodrigo Album")
+  @Schema(
+      description = "New description for the product (optional)",
+      example = "Olivia Rodrigo Album")
   private String description;
 
   @Schema(description = "New price for the product (optional)", example = "800")
+  @DecimalMin(value = "0", message = "Price must be greater than or equal to 0.")
   private BigDecimal price;
 
   public ProductUpdateDTO() {}

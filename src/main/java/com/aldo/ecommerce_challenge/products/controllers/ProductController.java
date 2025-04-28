@@ -70,7 +70,8 @@ public class ProductController {
         @ApiResponse(responseCode = "200", description = "Product updated"),
       })
   @PutMapping("/{id}")
-  public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody ProductUpdateDTO dto) {
+  public ResponseEntity<Product> update(
+      @PathVariable Long id, @Valid @RequestBody ProductUpdateDTO dto) {
     return this.productService
         .update(id, dto)
         .map(ResponseEntity::ok)
