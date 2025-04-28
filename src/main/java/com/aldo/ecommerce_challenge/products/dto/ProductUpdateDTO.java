@@ -5,12 +5,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-@Schema(name = "ProductCreateDTO", description = "DTO used to create a new product")
+@Schema(
+    name = "ProductUpdateDTO",
+    description =
+        "DTO used to update an existing product. This DTO allows you to modify the product's name, description, and price.")
 public class ProductUpdateDTO {
   @Schema(description = "New name for the product (optional)", example = "SOUR")
   private String name;
 
-  @Schema(description = "New desciption for the product (optional)")
+  @Schema(description = "New description for the product (optional)", example = "Olivia Rodrigo Album")
   private String description;
 
   @Schema(description = "New price for the product (optional)", example = "800")
