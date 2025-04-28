@@ -1,15 +1,28 @@
 package com.aldo.ecommerce_challenge.orderItems.dto;
 
 import com.aldo.ecommerce_challenge.products.models.Product;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Schema(description = "DTO representing an order item with a product, quantity, and price details.")
 public class OrderItemDTOWithProduct {
+  @Schema(description = "The unique identifier of the order item.", example = "1")
   private Long id;
+
+  @Schema(description = "The ID of the order to which the item belongs.", example = "100")
   private Long orderId;
+
+  @Schema(description = "The product associated with the order item, including product details.")
   private Product product;
+
+  @Schema(description = "The quantity of the product in this order item.", example = "2")
   private Integer quantity;
+
+  @Schema(
+      description = "The price of a single unit of the product in this order item.",
+      example = "800")
   private BigDecimal price;
 
   public OrderItemDTOWithProduct(

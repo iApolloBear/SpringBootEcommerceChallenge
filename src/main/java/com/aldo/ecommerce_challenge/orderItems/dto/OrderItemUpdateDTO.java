@@ -1,11 +1,25 @@
 package com.aldo.ecommerce_challenge.orderItems.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.Objects;
 import java.util.Optional;
 
+@Schema(description = "DTO representing the data needed to update an order item.")
 public class OrderItemUpdateDTO {
+  @Schema(
+      description = "The ID of the order associated with the item to be updated.",
+      example = "1")
   private Long orderId;
+
+  @Schema(
+      description = "The ID of the product associated with the order item to be updated.",
+      example = "1")
   private Long productId;
+
+  @Schema(
+      description = "The quantity of the product in the order item to be updated.",
+      example = "3")
   private Integer quantity;
 
   public OrderItemUpdateDTO() {}

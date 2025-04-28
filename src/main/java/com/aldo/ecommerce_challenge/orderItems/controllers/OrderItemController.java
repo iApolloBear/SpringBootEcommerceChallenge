@@ -4,6 +4,8 @@ import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemCreateDTO;
 import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemDTO;
 import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemUpdateDTO;
 import com.aldo.ecommerce_challenge.orderItems.services.OrderItemService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +23,22 @@ public class OrderItemController {
     this.orderItemService = orderItemService;
   }
 
+  @Operation(
+      summary = "Find all order items",
+      description = "Fetches all order items from the database.",
+      responses = {@ApiResponse(responseCode = "200", description = "Order items found")})
   @GetMapping
   public ResponseEntity<List<OrderItemDTO>> getAll() {
     return ResponseEntity.ok(this.orderItemService.findAll());
   }
 
+  @Operation(
+      summary = "Find an order item",
+      description = "Finds an order item by its ID.",
+      responses = {
+        @ApiResponse(responseCode = "200", description = "Order item found"),
+        @ApiResponse(responseCode = "404", description = "Order item not found")
+      })
   @GetMapping("/{id}")
   public ResponseEntity<OrderItemDTO> getById(@PathVariable Long id) {
     return this.orderItemService
@@ -34,11 +47,25 @@ public class OrderItemController {
         .orElse(ResponseEntity.notFound().build());
   }
 
+  @Operation(
+      summary = "Create a new order item",
+      description = "Creates a new order item in the database.",
+      responses = {
+        @ApiResponse(responseCode = "201", description = "Order item created successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid input data")
+      })
   @PostMapping
   public ResponseEntity<OrderItemDTO> create(@RequestBody OrderItemCreateDTO orderItem) {
     return ResponseEntity.status(HttpStatus.CREATED).body(this.orderItemService.save(orderItem));
   }
 
+  @Operation(
+      summary = "Update an existing order item",
+      description = "Updates an order item by its ID.",
+      responses = {
+        @ApiResponse(responseCode = "200", description = "Order item updated successfully"),
+        @ApiResponse(responseCode = "404", description = "Order item not found")
+      })
   @PutMapping("/{id}")
   public ResponseEntity<OrderItemDTO> update(
       @PathVariable Long id, @RequestBody OrderItemUpdateDTO dto) {
@@ -48,6 +75,13 @@ public class OrderItemController {
         .orElse(ResponseEntity.notFound().build());
   }
 
+  @Operation(
+      summary = "Delete an order item",
+      description = "Deletes an order item by its ID.",
+      responses = {
+        @ApiResponse(responseCode = "200", description = "Order item deleted successfully"),
+        @ApiResponse(responseCode = "404", description = "Order item not found")
+      })
   @DeleteMapping("/{id}")
   public ResponseEntity<OrderItemDTO> delete(@PathVariable Long id) {
     return this.orderItemService
