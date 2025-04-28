@@ -2,6 +2,7 @@ package com.aldo.ecommerce_challenge.products.controllers;
 
 import com.aldo.ecommerce_challenge.products.dto.ProductCreateDTO;
 import com.aldo.ecommerce_challenge.products.dto.ProductUpdateDTO;
+import com.aldo.ecommerce_challenge.products.exceptions.ProductNotFoundException;
 import com.aldo.ecommerce_challenge.products.models.Product;
 import com.aldo.ecommerce_challenge.products.services.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,14 +40,13 @@ public class ProductController {
       parameters = {@Parameter(name = "id", description = "Product ID", required = true)},
       responses = {
         @ApiResponse(responseCode = "200", description = "Product found"),
-        @ApiResponse(responseCode = "404", description = "Product not found")
       })
   @GetMapping("/{id}")
   public ResponseEntity<Product> getById(@PathVariable Long id) {
     return this.productService
         .findById(id)
         .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+        .orElseThrow(() -> new ProductNotFoundException(id));
   }
 
   @Operation(
@@ -54,7 +54,6 @@ public class ProductController {
       description = "Add a new product to the database.",
       responses = {
         @ApiResponse(responseCode = "201", description = "Product created"),
-        @ApiResponse(responseCode = "400", description = "Invalid input data")
       })
   @PostMapping
   public ResponseEntity<Product> create(@RequestBody ProductCreateDTO dto) {
@@ -67,15 +66,13 @@ public class ProductController {
       parameters = {@Parameter(name = "id", description = "Product ID", required = true)},
       responses = {
         @ApiResponse(responseCode = "200", description = "Product updated"),
-        @ApiResponse(responseCode = "400", description = "Invalid input data"),
-        @ApiResponse(responseCode = "404", description = "Product not found")
       })
   @PutMapping("/{id}")
   public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody ProductUpdateDTO dto) {
     return this.productService
         .update(id, dto)
         .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+        .orElseThrow(() -> new ProductNotFoundException(id));
   }
 
   @Operation(
@@ -84,13 +81,12 @@ public class ProductController {
       parameters = {@Parameter(name = "id", description = "Product ID", required = true)},
       responses = {
         @ApiResponse(responseCode = "200", description = "Product deleted"),
-        @ApiResponse(responseCode = "404", description = "Product not found")
       })
   @DeleteMapping("/{id}")
   public ResponseEntity<Product> delete(@PathVariable Long id) {
     return this.productService
         .delete(id)
         .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+        .orElseThrow(() -> new ProductNotFoundException(id));
   }
 }
