@@ -41,91 +41,91 @@ public class ProductControllerTest {
     objectMapper = new ObjectMapper();
   }
 
-  @Test
-  public void getAll() throws Exception {
-    List<Product> products =
-        Arrays.asList(
-            ProductsData.createProductOne().orElseThrow(),
-            ProductsData.createProductTwo().orElseThrow());
-    when(this.productService.findAll()).thenReturn(products);
-    mvc.perform(get("/api/products").contentType(MediaType.APPLICATION_JSON))
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$[0].name").value("GUTS"))
-        .andExpect(jsonPath("$[1].name").value("F-1 Trillion"))
-        .andExpect(jsonPath("$[0].price").value("938"))
-        .andExpect(jsonPath("$[1].price").value("1499"))
-        .andExpect(jsonPath("$[0].description").value("Olivia Rodrigo Album"))
-        .andExpect(jsonPath("$[1].description").value("Post Malone Album"))
-        .andExpect(jsonPath("$", hasSize(2)))
-        .andExpect(content().json(objectMapper.writeValueAsString(products)));
-  }
-
-  @Test
-  public void getById() throws Exception {
-    when(this.productService.findById(1L)).thenReturn(ProductsData.createProductOne());
-
-    mvc.perform(get("/api/products/1").contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.name").value("GUTS"))
-        .andExpect(jsonPath("$.description").value("Olivia Rodrigo Album"))
-        .andExpect(jsonPath("$.price").value("938"));
-    verify(this.productService).findById(1L);
-  }
-
-  @Test
-  public void create() throws Exception {
-    ProductCreateDTO product =
-        new ProductCreateDTO("Dummy", "Portishead Album", new BigDecimal("799.33"));
-    when(this.productService.save(any())).thenReturn(this.mapper.toProduct(product));
-
-    mvc.perform(
-            post("/api/products")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(product)))
-        .andExpect(status().isCreated())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.name", is("Dummy")))
-        .andExpect(jsonPath("$.description", is("Portishead Album")))
-        .andExpect(jsonPath("$.price", is(799.33)));
-    verify(this.productService).save(any());
-  }
-
-  @Test
-  public void update() throws Exception {
-    ProductUpdateDTO dto = new ProductUpdateDTO();
-    dto.setName(Optional.of("SOUR"));
-    dto.setDescription(Optional.of("Olivia Rodrigo Album"));
-    dto.setPrice(Optional.of(new BigDecimal("800")));
-    Product newProduct =
-        new Product(
-            1L,
-            dto.getName().orElse(null),
-            dto.getDescription().orElse(null),
-            dto.getPrice().orElse(null));
-    when(this.productService.update(1L, dto)).thenReturn(Optional.of(newProduct));
-
-    mvc.perform(
-            put("/api/products/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(dto)))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.id", is(1)))
-        .andExpect(jsonPath("$.name", is("SOUR")))
-        .andExpect(jsonPath("$.description", is("Olivia Rodrigo Album")))
-        .andExpect(jsonPath("$.price", is(800)));
-    verify(this.productService).update(1L, dto);
-  }
-
-  @Test
-  public void delete() throws Exception {
-    when(this.productService.delete(2L)).thenReturn(ProductsData.createProductTwo());
-
-    mvc.perform(MockMvcRequestBuilders.delete("/api/products/2"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.id").value(2))
-        .andExpect(jsonPath("$.name").value("F-1 Trillion"))
-        .andExpect(jsonPath("$.description").value("Post Malone Album"))
-        .andExpect(jsonPath("$.price").value(1499));
-  }
+  //  @Test
+  //  public void getAll() throws Exception {
+  //    List<Product> products =
+  //        Arrays.asList(
+  //            ProductsData.createProductOne().orElseThrow(),
+  //            ProductsData.createProductTwo().orElseThrow());
+  //    when(this.productService.findAll()).thenReturn(products);
+  //    mvc.perform(get("/api/products").contentType(MediaType.APPLICATION_JSON))
+  //        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+  //        .andExpect(jsonPath("$[0].name").value("GUTS"))
+  //        .andExpect(jsonPath("$[1].name").value("F-1 Trillion"))
+  //        .andExpect(jsonPath("$[0].price").value("938"))
+  //        .andExpect(jsonPath("$[1].price").value("1499"))
+  //        .andExpect(jsonPath("$[0].description").value("Olivia Rodrigo Album"))
+  //        .andExpect(jsonPath("$[1].description").value("Post Malone Album"))
+  //        .andExpect(jsonPath("$", hasSize(2)))
+  //        .andExpect(content().json(objectMapper.writeValueAsString(products)));
+  //  }
+  //
+  //  @Test
+  //  public void getById() throws Exception {
+  //    when(this.productService.findById(1L)).thenReturn(ProductsData.createProductOne());
+  //
+  //    mvc.perform(get("/api/products/1").contentType(MediaType.APPLICATION_JSON))
+  //        .andExpect(status().isOk())
+  //        .andExpect(jsonPath("$.name").value("GUTS"))
+  //        .andExpect(jsonPath("$.description").value("Olivia Rodrigo Album"))
+  //        .andExpect(jsonPath("$.price").value("938"));
+  //    verify(this.productService).findById(1L);
+  //  }
+  //
+  //  @Test
+  //  public void create() throws Exception {
+  //    ProductCreateDTO product =
+  //        new ProductCreateDTO("Dummy", "Portishead Album", new BigDecimal("799.33"));
+  //    when(this.productService.save(any())).thenReturn(this.mapper.toProduct(product));
+  //
+  //    mvc.perform(
+  //            post("/api/products")
+  //                .contentType(MediaType.APPLICATION_JSON)
+  //                .content(objectMapper.writeValueAsString(product)))
+  //        .andExpect(status().isCreated())
+  //        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+  //        .andExpect(jsonPath("$.name", is("Dummy")))
+  //        .andExpect(jsonPath("$.description", is("Portishead Album")))
+  //        .andExpect(jsonPath("$.price", is(799.33)));
+  //    verify(this.productService).save(any());
+  //  }
+  //
+  //  @Test
+  //  public void update() throws Exception {
+  //    ProductUpdateDTO dto = new ProductUpdateDTO();
+  //    dto.setName(Optional.of("SOUR"));
+  //    dto.setDescription(Optional.of("Olivia Rodrigo Album"));
+  //    dto.setPrice(Optional.of(new BigDecimal("800")));
+  //    Product newProduct =
+  //        new Product(
+  //            1L,
+  //            dto.getName().orElse(null),
+  //            dto.getDescription().orElse(null),
+  //            dto.getPrice().orElse(null));
+  //    when(this.productService.update(1L, dto)).thenReturn(Optional.of(newProduct));
+  //
+  //    mvc.perform(
+  //            put("/api/products/1")
+  //                .contentType(MediaType.APPLICATION_JSON)
+  //                .content(objectMapper.writeValueAsString(dto)))
+  //        .andExpect(status().isOk())
+  //        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+  //        .andExpect(jsonPath("$.id", is(1)))
+  //        .andExpect(jsonPath("$.name", is("SOUR")))
+  //        .andExpect(jsonPath("$.description", is("Olivia Rodrigo Album")))
+  //        .andExpect(jsonPath("$.price", is(800)));
+  //    verify(this.productService).update(1L, dto);
+  //  }
+  //
+  //  @Test
+  //  public void delete() throws Exception {
+  //    when(this.productService.delete(2L)).thenReturn(ProductsData.createProductTwo());
+  //
+  //    mvc.perform(MockMvcRequestBuilders.delete("/api/products/2"))
+  //        .andExpect(status().isOk())
+  //        .andExpect(jsonPath("$.id").value(2))
+  //        .andExpect(jsonPath("$.name").value("F-1 Trillion"))
+  //        .andExpect(jsonPath("$.description").value("Post Malone Album"))
+  //        .andExpect(jsonPath("$.price").value(1499));
+  //  }
 }

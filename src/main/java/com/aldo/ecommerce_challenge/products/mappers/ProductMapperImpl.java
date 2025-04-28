@@ -3,9 +3,9 @@ package com.aldo.ecommerce_challenge.products.mappers;
 import com.aldo.ecommerce_challenge.products.dto.ProductCreateDTO;
 import com.aldo.ecommerce_challenge.products.dto.ProductUpdateDTO;
 import com.aldo.ecommerce_challenge.products.models.Product;
+import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
+@Component
 public class ProductMapperImpl implements ProductMapper {
   @Override
   public ProductCreateDTO toCreateDto(Product product) {

@@ -3,7 +3,6 @@ package com.aldo.ecommerce_challenge.products.services;
 import com.aldo.ecommerce_challenge.products.dto.ProductCreateDTO;
 import com.aldo.ecommerce_challenge.products.dto.ProductUpdateDTO;
 import com.aldo.ecommerce_challenge.products.mappers.ProductMapper;
-import com.aldo.ecommerce_challenge.products.mappers.ProductMapperImpl;
 import com.aldo.ecommerce_challenge.products.models.Product;
 import com.aldo.ecommerce_challenge.products.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -15,10 +14,11 @@ import java.util.Optional;
 @Service
 public class ProductServiceImpl implements ProductService {
   private final ProductRepository repository;
-  private final ProductMapper mapper = new ProductMapperImpl();
+  private final ProductMapper mapper;
 
-  public ProductServiceImpl(ProductRepository repository) {
+  public ProductServiceImpl(ProductRepository repository, ProductMapper mapper) {
     this.repository = repository;
+    this.mapper = mapper;
   }
 
   @Override
