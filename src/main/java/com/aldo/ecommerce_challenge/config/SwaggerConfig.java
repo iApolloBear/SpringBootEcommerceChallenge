@@ -19,16 +19,35 @@ public class SwaggerConfig {
             new Info()
                 .title("E-commerce API")
                 .description(
-                    "Simple Spring Boot API for Products, Orders, and Order Items management.")
-                .version("v1.0.0")
-                .contact(
-                    new Contact()
-                        .name("Aldo Espinosa")
-                        .url("https://github.com/iApolloBear/SpringBootEcommerceChallenge")
-                        .email("aldoespinosaperez1@gmail.com")))
+                    """
+                Welcome to the **E-commerce API**.
+
+                This API allows you to manage products, orders, and order items in an online store environment.
+
+                ## ✨ Features
+                - Manage Products: Create, update, delete, and list products with pricing and descriptions.
+                - Manage Orders: Create and update orders, automatically calculate total prices based on associated order items.
+                - Manage Order Items: Link products to orders, update quantities, and handle dynamic price totals.
+                - Validation: Enforced request validations on all input data with meaningful error responses.
+                - Error Handling: Standardized error responses for bad requests, not found, and server errors.
+                - OpenAPI 3 Documentation: All endpoints fully documented with examples, tags, and standardized schemas.
+
+                ## 📦 Tech Stack
+                - Java 21
+                - Spring Boot 3
+                - Spring Data JPA
+                - Hibernate
+                - PostgreSQL
+                - OpenAPI 3
+                - JUnit 5 & Mockito
+
+                🚀 Feel free to explore the endpoints below!
+                """)
+                .version("1.0.0")
+                .contact(new Contact().name("Aldo Espinosa").email("aldoespinosaperez1@gmail.com")))
         .externalDocs(
             new ExternalDocumentation()
-                .description("SpringBootEcommerceChallenge")
+                .description("GitHub Repository")
                 .url("https://github.com/iApolloBear/SpringBootEcommerceChallenge"))
         .tags(
             List.of(
