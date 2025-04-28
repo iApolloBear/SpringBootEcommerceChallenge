@@ -1,14 +1,23 @@
 package com.aldo.ecommerce_challenge.products.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class ProductCreateUpdateDTO {
+public class ProductCreateDTO {
+  @Schema(description = "Name of the product", example = "GUTS")
   private String name;
+
+  @Schema(description = "Description of the product", example = "Olivia Rodrigo Album")
   private String description;
+
+  @Schema(description = "Price of the product", example = "1753.89")
   private BigDecimal price;
 
-  public ProductCreateUpdateDTO(String name, String description, BigDecimal price) {
+  public ProductCreateDTO() {}
+
+  public ProductCreateDTO(String name, String description, BigDecimal price) {
     this.name = name;
     this.description = description;
     this.price = price;
@@ -42,7 +51,7 @@ public class ProductCreateUpdateDTO {
   public boolean equals(Object object) {
     if (this == object) return true;
     if (object == null || getClass() != object.getClass()) return false;
-    ProductCreateUpdateDTO that = (ProductCreateUpdateDTO) object;
+    ProductCreateDTO that = (ProductCreateDTO) object;
     return Objects.equals(name, that.name)
         && Objects.equals(description, that.description)
         && Objects.equals(price, that.price);

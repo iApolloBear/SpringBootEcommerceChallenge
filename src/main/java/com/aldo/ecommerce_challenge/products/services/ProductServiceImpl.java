@@ -1,6 +1,7 @@
 package com.aldo.ecommerce_challenge.products.services;
 
-import com.aldo.ecommerce_challenge.products.dto.ProductCreateUpdateDTO;
+import com.aldo.ecommerce_challenge.products.dto.ProductCreateDTO;
+import com.aldo.ecommerce_challenge.products.dto.ProductUpdateDTO;
 import com.aldo.ecommerce_challenge.products.mappers.ProductMapper;
 import com.aldo.ecommerce_challenge.products.mappers.ProductMapperImpl;
 import com.aldo.ecommerce_challenge.products.models.Product;
@@ -34,20 +35,20 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   @Transactional
-  public Product save(ProductCreateUpdateDTO dto) {
+  public Product save(ProductCreateDTO dto) {
     return this.repository.save(this.mapper.toProduct(dto));
   }
 
   @Override
-  public Optional<Product> update(Long id, ProductCreateUpdateDTO dto) {
+  public Optional<Product> update(Long id, ProductUpdateDTO dto) {
     return repository
         .findById(id)
         .map(
-            productDb -> {
-              productDb.setName(dto.getName());
-              productDb.setDescription(dto.getDescription());
-              productDb.setPrice(dto.getPrice());
-              return this.repository.save(productDb);
+            product -> {
+              dto.getName().ifPresent(product::setName);
+              dto.getDescription().ifPresent(product::setDescription);
+              dto.getPrice().ifPresent(product::setPrice);
+              return this.repository.save(product);
             });
   }
 

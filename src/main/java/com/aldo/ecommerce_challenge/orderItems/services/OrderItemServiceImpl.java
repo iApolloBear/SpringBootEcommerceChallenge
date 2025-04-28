@@ -1,7 +1,8 @@
 package com.aldo.ecommerce_challenge.orderItems.services;
 
-import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemCreateUpdateDTO;
+import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemCreateDTO;
 import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemDTO;
+import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemUpdateDTO;
 import com.aldo.ecommerce_challenge.orderItems.mappers.OrderItemMapper;
 import com.aldo.ecommerce_challenge.orderItems.models.OrderItem;
 import com.aldo.ecommerce_challenge.orderItems.repositories.OrderItemRepository;
@@ -12,6 +13,7 @@ import com.aldo.ecommerce_challenge.products.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -50,27 +52,59 @@ public class OrderItemServiceImpl implements OrderItemService {
 
   @Override
   @Transactional
-  public OrderItemDTO save(OrderItemCreateUpdateDTO orderItemDto) {
+  public OrderItemDTO save(OrderItemCreateDTO orderItemDto) {
     Product product = this.productRepository.findById(orderItemDto.getProductId()).orElseThrow();
     Order order = this.orderRepository.findById(orderItemDto.getOrderId()).orElseThrow();
     OrderItem orderItem = new OrderItem(order, product, orderItemDto.getQuantity());
+    order.addItem(orderItem);
+    this.orderRepository.save(order);
     return this.orderItemMapper.toOrderItemDto(this.orderItemRepository.save(orderItem));
   }
 
   @Override
   @Transactional
-  public Optional<OrderItemDTO> update(Long id, OrderItemCreateUpdateDTO orderItemDto) {
-    Product product = this.productRepository.findById(orderItemDto.getProductId()).orElseThrow();
-    Order order = this.orderRepository.findById(orderItemDto.getOrderId()).orElseThrow();
+  public Optional<OrderItemDTO> update(Long id, OrderItemUpdateDTO orderItemDto) {
     return this.orderItemRepository
         .findById(id)
         .map(
             orderItemDb -> {
-              orderItemDb.setOrder(order);
-              orderItemDb.setProduct(product);
-              orderItemDb.setQuantity(orderItemDto.getQuantity());
-              return this.orderItemMapper.toOrderItemDto(
-                  this.orderItemRepository.save(orderItemDb));
+              if (orderItemDto.getOrderId() != null) {
+                Order oldOrder = orderItemDb.getOrder();
+                oldOrder.setTotal(oldOrder.getTotal().subtract(orderItemDb.getPrice()));
+                Order newOrder =
+                    this.orderRepository.findById(orderItemDto.getOrderId()).orElseThrow();
+                newOrder.setTotal(newOrder.getTotal().add(orderItemDb.getPrice()));
+                this.orderRepository.saveAll(List.of(oldOrder, newOrder));
+                orderItemDb.setOrder(newOrder);
+              }
+
+              if (orderItemDto.getProductId() != null) {
+                Order order = orderItemDb.getOrder();
+                order.setTotal(order.getTotal().subtract(orderItemDb.getPrice()));
+                Product product =
+                    this.productRepository.findById(orderItemDto.getProductId()).orElseThrow();
+                orderItemDb.setProduct(product);
+                orderItemDb.setPrice(
+                    product.getPrice().multiply(BigDecimal.valueOf(orderItemDb.getQuantity())));
+                order.setTotal(order.getTotal().add(orderItemDb.getPrice()));
+                this.orderRepository.save(order);
+              }
+
+              if (orderItemDto.getQuantity() != null) {
+                Order order = orderItemDb.getOrder();
+                order.setTotal(order.getTotal().subtract(orderItemDb.getPrice()));
+                orderItemDb.setQuantity(orderItemDto.getQuantity());
+                orderItemDb.setPrice(
+                    orderItemDb
+                        .getProduct()
+                        .getPrice()
+                        .multiply(BigDecimal.valueOf(orderItemDb.getQuantity())));
+                order.setTotal(order.getTotal().add(orderItemDb.getPrice()));
+                this.orderRepository.save(order);
+              }
+
+              OrderItem updatedOrderItem = this.orderItemRepository.save(orderItemDb);
+              return this.orderItemMapper.toOrderItemDto(updatedOrderItem);
             });
   }
 
@@ -80,6 +114,10 @@ public class OrderItemServiceImpl implements OrderItemService {
         .findById(id)
         .map(
             orderItem -> {
+              Order order =
+                  this.orderRepository.findById(orderItem.getOrder().getId()).orElseThrow();
+              order.removeItem(orderItem);
+              this.orderRepository.save(order);
               this.orderItemRepository.delete(orderItem);
               return this.orderItemMapper.toOrderItemDto(orderItem);
             });

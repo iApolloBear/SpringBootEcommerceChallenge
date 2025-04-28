@@ -61,7 +61,7 @@ class ProductServiceImplTest {
               p.setId(3L);
               return p;
             });
-    Product product = this.productService.save(this.mapper.toDto(rush));
+    Product product = this.productService.save(this.mapper.toCreateDto(rush));
     assertEquals("RUSH!", product.getName());
     assertEquals("Maneskin Album", product.getDescription());
     assertEquals("585.58", product.getPrice().toPlainString());
@@ -76,7 +76,7 @@ class ProductServiceImplTest {
     assertTrue(product.isPresent());
     Product newProduct = new Product(2L, "Stoney", "Post Malone Album", new BigDecimal("877.68"));
     when(this.productRepository.save(any(Product.class))).thenReturn(newProduct);
-    Optional<Product> result = this.productService.update(2L, this.mapper.toDto(newProduct));
+    Optional<Product> result = this.productService.update(2L, this.mapper.toUpdateDto(newProduct));
     assertTrue(result.isPresent());
     assertEquals("Stoney", result.get().getName());
     assertEquals("Post Malone Album", result.get().getDescription());
