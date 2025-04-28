@@ -1,14 +1,18 @@
 package com.aldo.ecommerce_challenge.orderItems.mappers;
 
-import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemCreateUpdateDTO;
+import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemCreateDTO;
 import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemDTO;
 import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemDTOWithProduct;
+import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemUpdateDTO;
 import com.aldo.ecommerce_challenge.orderItems.models.OrderItem;
 import com.aldo.ecommerce_challenge.orders.models.Order;
 import com.aldo.ecommerce_challenge.orders.repositories.OrderRepository;
+import com.aldo.ecommerce_challenge.products.dto.ProductUpdateDTO;
 import com.aldo.ecommerce_challenge.products.models.Product;
 import com.aldo.ecommerce_challenge.products.repositories.ProductRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 public class OrderItemMapperImpl implements OrderItemMapper {
@@ -34,7 +38,14 @@ public class OrderItemMapperImpl implements OrderItemMapper {
   }
 
   @Override
-  public OrderItem toOrderItem(OrderItemCreateUpdateDTO dto) {
+  public OrderItem toOrderItem(OrderItemCreateDTO dto) {
+    Order order = this.orderRepository.findById(dto.getOrderId()).orElseThrow();
+    Product product = this.productRepository.findById(dto.getProductId()).orElseThrow();
+    return new OrderItem(order, product, dto.getQuantity());
+  }
+
+  @Override
+  public OrderItem toOrderItem(OrderItemUpdateDTO dto) {
     Order order = this.orderRepository.findById(dto.getOrderId()).orElseThrow();
     Product product = this.productRepository.findById(dto.getProductId()).orElseThrow();
     return new OrderItem(order, product, dto.getQuantity());
@@ -61,8 +72,14 @@ public class OrderItemMapperImpl implements OrderItemMapper {
   }
 
   @Override
-  public OrderItemCreateUpdateDTO toOrderItemCreateUpdateDto(OrderItem orderItem) {
-    return new OrderItemCreateUpdateDTO(
+  public OrderItemCreateDTO toOrderItemCreateDto(OrderItem orderItem) {
+    return new OrderItemCreateDTO(
+        orderItem.getOrder().getId(), orderItem.getProduct().getId(), orderItem.getQuantity());
+  }
+
+  @Override
+  public OrderItemUpdateDTO toOrderItemUpdateDto(OrderItem orderItem) {
+    return new OrderItemUpdateDTO(
         orderItem.getOrder().getId(), orderItem.getProduct().getId(), orderItem.getQuantity());
   }
 }

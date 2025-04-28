@@ -1,7 +1,8 @@
 package com.aldo.ecommerce_challenge.orderItems.services;
 
-import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemCreateUpdateDTO;
+import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemCreateDTO;
 import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemDTO;
+import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemUpdateDTO;
 import com.aldo.ecommerce_challenge.orderItems.mappers.OrderItemMapper;
 import com.aldo.ecommerce_challenge.orderItems.models.OrderItem;
 import com.aldo.ecommerce_challenge.orderItems.repositories.OrderItemRepository;
@@ -14,9 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -53,7 +52,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
   @Override
   @Transactional
-  public OrderItemDTO save(OrderItemCreateUpdateDTO orderItemDto) {
+  public OrderItemDTO save(OrderItemCreateDTO orderItemDto) {
     Product product = this.productRepository.findById(orderItemDto.getProductId()).orElseThrow();
     Order order = this.orderRepository.findById(orderItemDto.getOrderId()).orElseThrow();
     OrderItem orderItem = new OrderItem(order, product, orderItemDto.getQuantity());
@@ -64,32 +63,44 @@ public class OrderItemServiceImpl implements OrderItemService {
 
   @Override
   @Transactional
-  public Optional<OrderItemDTO> update(Long id, OrderItemCreateUpdateDTO orderItemDto) {
+  public Optional<OrderItemDTO> update(Long id, OrderItemUpdateDTO orderItemDto) {
     return this.orderItemRepository
         .findById(id)
         .map(
             orderItemDb -> {
               if (orderItemDto.getOrderId() != null) {
-                Order order =
+                Order oldOrder = orderItemDb.getOrder();
+                oldOrder.setTotal(oldOrder.getTotal().subtract(orderItemDb.getPrice()));
+                Order newOrder =
                     this.orderRepository.findById(orderItemDto.getOrderId()).orElseThrow();
-                orderItemDb.setOrder(order);
+                newOrder.setTotal(newOrder.getTotal().add(orderItemDb.getPrice()));
+                this.orderRepository.saveAll(List.of(oldOrder, newOrder));
+                orderItemDb.setOrder(newOrder);
               }
 
               if (orderItemDto.getProductId() != null) {
+                Order order = orderItemDb.getOrder();
+                order.setTotal(order.getTotal().subtract(orderItemDb.getPrice()));
                 Product product =
                     this.productRepository.findById(orderItemDto.getProductId()).orElseThrow();
                 orderItemDb.setProduct(product);
                 orderItemDb.setPrice(
                     product.getPrice().multiply(BigDecimal.valueOf(orderItemDb.getQuantity())));
+                order.setTotal(order.getTotal().add(orderItemDb.getPrice()));
+                this.orderRepository.save(order);
               }
 
               if (orderItemDto.getQuantity() != null) {
+                Order order = orderItemDb.getOrder();
+                order.setTotal(order.getTotal().subtract(orderItemDb.getPrice()));
                 orderItemDb.setQuantity(orderItemDto.getQuantity());
                 orderItemDb.setPrice(
                     orderItemDb
                         .getProduct()
                         .getPrice()
                         .multiply(BigDecimal.valueOf(orderItemDb.getQuantity())));
+                order.setTotal(order.getTotal().add(orderItemDb.getPrice()));
+                this.orderRepository.save(order);
               }
 
               OrderItem updatedOrderItem = this.orderItemRepository.save(orderItemDb);

@@ -1,7 +1,8 @@
 package com.aldo.ecommerce_challenge.orderItems.controllers;
 
-import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemCreateUpdateDTO;
+import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemCreateDTO;
 import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemDTO;
+import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemUpdateDTO;
 import com.aldo.ecommerce_challenge.orderItems.services.OrderItemService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -34,13 +35,13 @@ public class OrderItemController {
   }
 
   @PostMapping
-  public ResponseEntity<OrderItemDTO> create(@RequestBody OrderItemCreateUpdateDTO orderItem) {
+  public ResponseEntity<OrderItemDTO> create(@RequestBody OrderItemCreateDTO orderItem) {
     return ResponseEntity.status(HttpStatus.CREATED).body(this.orderItemService.save(orderItem));
   }
 
   @PutMapping("/{id}")
   public ResponseEntity<OrderItemDTO> update(
-      @PathVariable Long id, @RequestBody OrderItemCreateUpdateDTO dto) {
+      @PathVariable Long id, @RequestBody OrderItemUpdateDTO dto) {
     return this.orderItemService
         .update(id, dto)
         .map(ResponseEntity::ok)
