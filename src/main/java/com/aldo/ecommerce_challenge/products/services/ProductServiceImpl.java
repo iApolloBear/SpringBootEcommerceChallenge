@@ -45,9 +45,17 @@ public class ProductServiceImpl implements ProductService {
         .findById(id)
         .map(
             product -> {
-              dto.getName().ifPresent(product::setName);
-              dto.getDescription().ifPresent(product::setDescription);
-              dto.getPrice().ifPresent(product::setPrice);
+              if (dto.getName() != null) {
+                product.setName(dto.getName());
+              }
+
+              if (dto.getDescription() != null) {
+                product.setDescription(dto.getDescription());
+              }
+
+              if (dto.getPrice() != null) {
+                product.setPrice(dto.getPrice());
+              }
               return this.repository.save(product);
             });
   }

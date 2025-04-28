@@ -8,37 +8,43 @@ import java.util.Optional;
 
 public class ProductUpdateDTO {
   @Schema(description = "New name for the product (optional)", example = "SOUR")
-  private Optional<String> name = Optional.empty();
+  private String name;
 
   @Schema(description = "New desciption for the product (optional)")
-  private Optional<String> description = Optional.empty();
+  private String description;
 
   @Schema(description = "New price for the product (optional)", example = "800")
-  private Optional<BigDecimal> price = Optional.empty();
+  private BigDecimal price;
 
   public ProductUpdateDTO() {}
 
-  public Optional<String> getName() {
+  public ProductUpdateDTO(String name, String description, BigDecimal price) {
+    this.name = name;
+    this.description = description;
+    this.price = price;
+  }
+
+  public String getName() {
     return name;
   }
 
-  public void setName(Optional<String> name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public Optional<String> getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Optional<String> description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public Optional<BigDecimal> getPrice() {
+  public BigDecimal getPrice() {
     return price;
   }
 
-  public void setPrice(Optional<BigDecimal> price) {
+  public void setPrice(BigDecimal price) {
     this.price = price;
   }
 

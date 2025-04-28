@@ -14,11 +14,7 @@ public class ProductMapperImpl implements ProductMapper {
 
   @Override
   public ProductUpdateDTO toUpdateDto(Product product) {
-    ProductUpdateDTO dto = new ProductUpdateDTO();
-    dto.setName(Optional.of(product.getName()));
-    dto.setDescription(Optional.of(product.getDescription()));
-    dto.setPrice(Optional.of(product.getPrice()));
-    return dto;
+    return new ProductUpdateDTO(product.getName(), product.getDescription(), product.getPrice());
   }
 
   @Override
@@ -28,7 +24,6 @@ public class ProductMapperImpl implements ProductMapper {
 
   @Override
   public Product toProduct(ProductUpdateDTO dto) {
-    return new Product(
-        dto.getName().orElse(null), dto.getDescription().orElse(null), dto.getPrice().orElse(null));
+    return new Product(dto.getName(), dto.getDescription(), dto.getPrice());
   }
 }
