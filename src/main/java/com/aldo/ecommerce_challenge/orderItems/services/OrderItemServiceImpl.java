@@ -65,25 +65,32 @@ public class OrderItemServiceImpl implements OrderItemService {
   @Override
   @Transactional
   public Optional<OrderItemDTO> update(Long id, OrderItemCreateUpdateDTO orderItemDto) {
-    Product product = this.productRepository.findById(orderItemDto.getProductId()).orElseThrow();
-    Order order = this.orderRepository.findById(orderItemDto.getOrderId()).orElseThrow();
     return this.orderItemRepository
         .findById(id)
         .map(
             orderItemDb -> {
-              if (orderItemDto.getQuantity() <= 0) {
-                this.orderItemRepository.delete(orderItemDb);
-                OrderItemDTO result = this.orderItemMapper.toOrderItemDto(orderItemDb);
-                order.removeItem(orderItemDb);
-                this.orderRepository.save(order);
-                return result;
+              if (orderItemDto.getOrderId() != null) {
+                Order order =
+                    this.orderRepository.findById(orderItemDto.getOrderId()).orElseThrow();
+                orderItemDb.setOrder(order);
               }
 
-              orderItemDb.setOrder(order);
-              orderItemDb.setProduct(product);
-              orderItemDb.setQuantity(orderItemDto.getQuantity());
-              orderItemDb.setPrice(
-                  product.getPrice().multiply(BigDecimal.valueOf(orderItemDb.getQuantity())));
+              if (orderItemDto.getProductId() != null) {
+                Product product =
+                    this.productRepository.findById(orderItemDto.getProductId()).orElseThrow();
+                orderItemDb.setProduct(product);
+                orderItemDb.setPrice(
+                    product.getPrice().multiply(BigDecimal.valueOf(orderItemDb.getQuantity())));
+              }
+
+              if (orderItemDto.getQuantity() != null) {
+                orderItemDb.setQuantity(orderItemDto.getQuantity());
+                orderItemDb.setPrice(
+                    orderItemDb
+                        .getProduct()
+                        .getPrice()
+                        .multiply(BigDecimal.valueOf(orderItemDb.getQuantity())));
+              }
 
               OrderItem updatedOrderItem = this.orderItemRepository.save(orderItemDb);
               return this.orderItemMapper.toOrderItemDto(updatedOrderItem);
