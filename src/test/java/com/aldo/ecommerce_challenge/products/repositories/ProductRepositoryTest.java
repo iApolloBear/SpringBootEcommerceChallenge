@@ -1,6 +1,7 @@
 package com.aldo.ecommerce_challenge.products.repositories;
 
 import com.aldo.ecommerce_challenge.products.models.Product;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -17,7 +18,16 @@ public class ProductRepositoryTest {
   @Autowired ProductRepository productRepository;
 
   @Test
-  void findById() {
+  @DisplayName("Should find all products")
+  void testFindAll() {
+    List<Product> products = (List<Product>) this.productRepository.findAll();
+    assertFalse(products.isEmpty());
+    assertEquals(2, products.size());
+  }
+
+  @Test
+  @DisplayName("Should find product by id")
+  void testFindById() {
     Optional<Product> product = this.productRepository.findById(1L);
     assertTrue(product.isPresent());
     assertEquals("GUTS", product.get().getName());
@@ -28,13 +38,7 @@ public class ProductRepositoryTest {
   }
 
   @Test
-  void testFindAll() {
-    List<Product> products = (List<Product>) this.productRepository.findAll();
-    assertFalse(products.isEmpty());
-    assertEquals(2, products.size());
-  }
-
-  @Test
+  @DisplayName("Should save a new product successfully")
   void testSave() {
     Product abbeyRoad = new Product("Abbey Road", "The Beatles Album", new BigDecimal("779"));
     Product product = this.productRepository.save(abbeyRoad);
@@ -45,6 +49,7 @@ public class ProductRepositoryTest {
   }
 
   @Test
+  @DisplayName("Should save a new product successfully")
   void testUpdate() {
     Product dummy = new Product("Dummy", "Portishead Album", new BigDecimal("779.33"));
 
@@ -64,6 +69,7 @@ public class ProductRepositoryTest {
   }
 
   @Test
+  @DisplayName("Should delete a product")
   void testDelete() {
     Product product = this.productRepository.findById(2L).orElseThrow();
     assertEquals("F-1 Trillion", product.getName());
