@@ -63,7 +63,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     Order order =
         this.orderRepository
             .findById(orderItemDto.getOrderId())
-            .orElseThrow(() -> new OrderItemNotFoundException(orderItemDto.getOrderId()));
+            .orElseThrow(() -> new OrderNotFoundException(orderItemDto.getOrderId()));
     OrderItem orderItem = new OrderItem(order, product, orderItemDto.getQuantity());
     order.addItem(orderItem);
     this.orderRepository.save(order);
