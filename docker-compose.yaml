@@ -1,6 +1,6 @@
 services:
-  postgresql16:
-    container_name: postgres16
+  db:
+    container_name: postgres16DB
     image: 'postgres:16.2'
     environment:
       POSTGRES_DB: ecommerce
@@ -9,4 +9,27 @@ services:
       - '5432:5432'
     restart: always
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - spring-app
+  app:
+    container_name: ecommerce
+    build:
+      context: .
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/ecommerce
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=53cR3T@
+    ports:
+      - "8080:8080"
+    restart: always
+    networks:
+      - spring-app
+volumes:
+  postgres-data:
+    name: postgres-data
+networks:
+  spring-app:
+    name: spring-app
