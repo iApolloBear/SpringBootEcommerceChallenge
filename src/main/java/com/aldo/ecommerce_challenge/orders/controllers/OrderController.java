@@ -37,7 +37,6 @@ public class OrderController {
       description = "Retrieve a specific order by its ID.",
       responses = {
         @ApiResponse(responseCode = "200", description = "Order found"),
-        @ApiResponse(responseCode = "404", description = "Order not found")
       })
   @GetMapping("/{id}")
   public ResponseEntity<OrderDTO> getById(@PathVariable Long id) {
@@ -52,7 +51,6 @@ public class OrderController {
       description = "Create a new order and store it in the database.",
       responses = {
         @ApiResponse(responseCode = "201", description = "Order created successfully"),
-        @ApiResponse(responseCode = "400", description = "Invalid input data")
       })
   @PostMapping
   public ResponseEntity<OrderDTO> create() {
@@ -64,8 +62,6 @@ public class OrderController {
       description = "Update the order fields by its ID.",
       responses = {
         @ApiResponse(responseCode = "200", description = "Order updated successfully"),
-        @ApiResponse(responseCode = "400", description = "Invalid input data"),
-        @ApiResponse(responseCode = "404", description = "Order not found")
       })
   @PutMapping("/{id}")
   public ResponseEntity<OrderDTO> update(@PathVariable Long id, @RequestBody OrderUpdateDTO dto) {
@@ -80,7 +76,6 @@ public class OrderController {
       description = "Delete the order by its ID from the database.",
       responses = {
         @ApiResponse(responseCode = "200", description = "Order deleted successfully"),
-        @ApiResponse(responseCode = "404", description = "Order not found")
       })
   @DeleteMapping("/{id}")
   public ResponseEntity<OrderDTO> delete(@PathVariable Long id) {
