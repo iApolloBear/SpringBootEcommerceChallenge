@@ -1,5 +1,6 @@
 package com.aldo.ecommerce_challenge.products.repositories;
 
+import com.aldo.ecommerce_challenge.orderItems.repositories.OrderItemRepository;
 import com.aldo.ecommerce_challenge.products.models.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 public class ProductRepositoryTest {
   @Autowired ProductRepository productRepository;
+  @Autowired OrderItemRepository orderItemRepository;
 
   @Test
   @DisplayName("Should find all products")
@@ -71,13 +73,20 @@ public class ProductRepositoryTest {
   @Test
   @DisplayName("Should delete a product")
   void testDelete() {
+    orderItemRepository
+        .findAll()
+        .forEach(
+            item -> {
+              if (item.getProduct().getId().equals(2L)) {
+                orderItemRepository.delete(item);
+              }
+            });
     Product product = this.productRepository.findById(2L).orElseThrow();
     assertEquals("F-1 Trillion", product.getName());
 
     this.productRepository.delete(product);
 
+    assertEquals(1, this.productRepository.count());
     assertThrows(NoSuchElementException.class, () -> productRepository.findById(2L).orElseThrow());
-
-    assertEquals(1, List.of(this.productRepository.findAll()).size());
   }
 }
