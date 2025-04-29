@@ -1,5 +1,6 @@
 package com.aldo.ecommerce_challenge.orders;
 
+import com.aldo.ecommerce_challenge.orderItems.OrderItemsData;
 import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemDTO;
 import com.aldo.ecommerce_challenge.orderItems.models.OrderItem;
 import com.aldo.ecommerce_challenge.orders.dto.OrderDTO;
@@ -12,17 +13,22 @@ import java.util.Optional;
 
 public class OrdersData {
   public static Optional<OrderDTO> createOrderDTOOne() {
-    OrderItemDTO orderItemDTO1 = new OrderItemDTO(1L, 1L, 1L, 1, new BigDecimal("938"));
-    OrderItemDTO orderItemDTO2 = new OrderItemDTO(2L, 1L, 2L, 1, new BigDecimal("1499"));
     return Optional.of(
-        new OrderDTO(1L, new BigDecimal("2437"), List.of(orderItemDTO1, orderItemDTO2)));
+        new OrderDTO(
+            1L,
+            new BigDecimal("2437"),
+            List.of(
+                OrderItemsData.createOrderItemDTOOne(), OrderItemsData.createOrderItemDTOTwo())));
   }
 
   public static Optional<OrderDTO> createOrderDTOTwo() {
-    OrderItemDTO orderItemDTO1 = new OrderItemDTO(3L, 2L, 1L, 2, new BigDecimal("1876"));
-    OrderItemDTO orderItemDTO2 = new OrderItemDTO(4L, 2L, 2L, 2, new BigDecimal("2998"));
     return Optional.of(
-        new OrderDTO(2L, new BigDecimal("4874"), List.of(orderItemDTO1, orderItemDTO2)));
+        new OrderDTO(
+            2L,
+            new BigDecimal("4874"),
+            List.of(
+                OrderItemsData.createOrderItemDTOThree(),
+                OrderItemsData.createOrderItemDTOFour())));
   }
 
   public static Optional<Order> createOrderOne() {
