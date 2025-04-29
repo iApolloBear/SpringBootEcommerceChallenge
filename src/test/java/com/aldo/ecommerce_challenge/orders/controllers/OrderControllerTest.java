@@ -3,7 +3,6 @@ package com.aldo.ecommerce_challenge.orders.controllers;
 import com.aldo.ecommerce_challenge.orders.OrdersData;
 import com.aldo.ecommerce_challenge.orders.dto.OrderDTO;
 import com.aldo.ecommerce_challenge.orders.dto.OrderUpdateDTO;
-import com.aldo.ecommerce_challenge.orders.models.Order;
 import com.aldo.ecommerce_challenge.orders.services.OrderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;

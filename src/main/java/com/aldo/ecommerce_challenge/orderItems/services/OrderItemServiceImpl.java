@@ -3,11 +3,14 @@ package com.aldo.ecommerce_challenge.orderItems.services;
 import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemCreateDTO;
 import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemDTO;
 import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemUpdateDTO;
+import com.aldo.ecommerce_challenge.orderItems.exceptions.OrderItemNotFoundException;
 import com.aldo.ecommerce_challenge.orderItems.mappers.OrderItemMapper;
 import com.aldo.ecommerce_challenge.orderItems.models.OrderItem;
 import com.aldo.ecommerce_challenge.orderItems.repositories.OrderItemRepository;
+import com.aldo.ecommerce_challenge.orders.exceptions.OrderNotFoundException;
 import com.aldo.ecommerce_challenge.orders.models.Order;
 import com.aldo.ecommerce_challenge.orders.repositories.OrderRepository;
+import com.aldo.ecommerce_challenge.products.exceptions.ProductNotFoundException;
 import com.aldo.ecommerce_challenge.products.models.Product;
 import com.aldo.ecommerce_challenge.products.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -53,8 +56,14 @@ public class OrderItemServiceImpl implements OrderItemService {
   @Override
   @Transactional
   public OrderItemDTO save(OrderItemCreateDTO orderItemDto) {
-    Product product = this.productRepository.findById(orderItemDto.getProductId()).orElseThrow();
-    Order order = this.orderRepository.findById(orderItemDto.getOrderId()).orElseThrow();
+    Product product =
+        this.productRepository
+            .findById(orderItemDto.getProductId())
+            .orElseThrow(() -> new ProductNotFoundException(orderItemDto.getProductId()));
+    Order order =
+        this.orderRepository
+            .findById(orderItemDto.getOrderId())
+            .orElseThrow(() -> new OrderItemNotFoundException(orderItemDto.getOrderId()));
     OrderItem orderItem = new OrderItem(order, product, orderItemDto.getQuantity());
     order.addItem(orderItem);
     this.orderRepository.save(order);
@@ -72,7 +81,9 @@ public class OrderItemServiceImpl implements OrderItemService {
                 Order oldOrder = orderItemDb.getOrder();
                 oldOrder.setTotal(oldOrder.getTotal().subtract(orderItemDb.getPrice()));
                 Order newOrder =
-                    this.orderRepository.findById(orderItemDto.getOrderId()).orElseThrow();
+                    this.orderRepository
+                        .findById(orderItemDto.getOrderId())
+                        .orElseThrow(() -> new OrderNotFoundException(orderItemDto.getOrderId()));
                 newOrder.setTotal(newOrder.getTotal().add(orderItemDb.getPrice()));
                 this.orderRepository.saveAll(List.of(oldOrder, newOrder));
                 orderItemDb.setOrder(newOrder);
@@ -82,7 +93,10 @@ public class OrderItemServiceImpl implements OrderItemService {
                 Order order = orderItemDb.getOrder();
                 order.setTotal(order.getTotal().subtract(orderItemDb.getPrice()));
                 Product product =
-                    this.productRepository.findById(orderItemDto.getProductId()).orElseThrow();
+                    this.productRepository
+                        .findById(orderItemDto.getProductId())
+                        .orElseThrow(
+                            () -> new ProductNotFoundException(orderItemDto.getProductId()));
                 orderItemDb.setProduct(product);
                 orderItemDb.setPrice(
                     product.getPrice().multiply(BigDecimal.valueOf(orderItemDb.getQuantity())));

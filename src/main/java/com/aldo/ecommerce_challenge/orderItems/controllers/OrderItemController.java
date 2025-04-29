@@ -3,10 +3,12 @@ package com.aldo.ecommerce_challenge.orderItems.controllers;
 import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemCreateDTO;
 import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemDTO;
 import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemUpdateDTO;
+import com.aldo.ecommerce_challenge.orderItems.exceptions.OrderItemNotFoundException;
 import com.aldo.ecommerce_challenge.orderItems.services.OrderItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,14 +39,13 @@ public class OrderItemController {
       description = "Finds an order item by its ID.",
       responses = {
         @ApiResponse(responseCode = "200", description = "Order item found"),
-        @ApiResponse(responseCode = "404", description = "Order item not found")
       })
   @GetMapping("/{id}")
   public ResponseEntity<OrderItemDTO> getById(@PathVariable Long id) {
     return this.orderItemService
         .findById(id)
         .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+        .orElseThrow(() -> new OrderItemNotFoundException(id));
   }
 
   @Operation(
@@ -52,10 +53,9 @@ public class OrderItemController {
       description = "Creates a new order item in the database.",
       responses = {
         @ApiResponse(responseCode = "201", description = "Order item created successfully"),
-        @ApiResponse(responseCode = "400", description = "Invalid input data")
       })
   @PostMapping
-  public ResponseEntity<OrderItemDTO> create(@RequestBody OrderItemCreateDTO orderItem) {
+  public ResponseEntity<OrderItemDTO> create(@Valid @RequestBody OrderItemCreateDTO orderItem) {
     return ResponseEntity.status(HttpStatus.CREATED).body(this.orderItemService.save(orderItem));
   }
 
@@ -64,15 +64,14 @@ public class OrderItemController {
       description = "Updates an order item by its ID.",
       responses = {
         @ApiResponse(responseCode = "200", description = "Order item updated successfully"),
-        @ApiResponse(responseCode = "404", description = "Order item not found")
       })
   @PutMapping("/{id}")
   public ResponseEntity<OrderItemDTO> update(
-      @PathVariable Long id, @RequestBody OrderItemUpdateDTO dto) {
+      @PathVariable Long id, @Valid @RequestBody OrderItemUpdateDTO dto) {
     return this.orderItemService
         .update(id, dto)
         .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+        .orElseThrow(() -> new OrderItemNotFoundException(id));
   }
 
   @Operation(
@@ -80,13 +79,12 @@ public class OrderItemController {
       description = "Deletes an order item by its ID.",
       responses = {
         @ApiResponse(responseCode = "200", description = "Order item deleted successfully"),
-        @ApiResponse(responseCode = "404", description = "Order item not found")
       })
   @DeleteMapping("/{id}")
   public ResponseEntity<OrderItemDTO> delete(@PathVariable Long id) {
     return this.orderItemService
         .delete(id)
         .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+        .orElseThrow(() -> new OrderItemNotFoundException(id));
   }
 }

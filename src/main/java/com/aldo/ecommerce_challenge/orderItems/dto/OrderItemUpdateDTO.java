@@ -1,9 +1,9 @@
 package com.aldo.ecommerce_challenge.orderItems.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Schema(description = "DTO representing the data needed to update an order item.")
 public class OrderItemUpdateDTO {
@@ -20,6 +20,7 @@ public class OrderItemUpdateDTO {
   @Schema(
       description = "The quantity of the product in the order item to be updated.",
       example = "3")
+  @Min(value = 0, message = "Quantity must be at least 0")
   private Integer quantity;
 
   public OrderItemUpdateDTO() {}
