@@ -24,6 +24,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(OrderController.class)
+@DisplayName("OrderController Tests")
 class OrderControllerTest {
   @Autowired private MockMvc mvc;
   @MockitoBean private OrderService orderService;

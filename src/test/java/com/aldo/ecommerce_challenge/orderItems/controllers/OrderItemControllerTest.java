@@ -4,13 +4,8 @@ import com.aldo.ecommerce_challenge.orderItems.OrderItemsData;
 import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemCreateDTO;
 import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemDTO;
 import com.aldo.ecommerce_challenge.orderItems.dto.OrderItemUpdateDTO;
-import com.aldo.ecommerce_challenge.orderItems.models.OrderItem;
 import com.aldo.ecommerce_challenge.orderItems.services.OrderItemService;
-import com.aldo.ecommerce_challenge.orders.OrdersData;
-import com.aldo.ecommerce_challenge.orders.dto.OrderDTO;
-import com.aldo.ecommerce_challenge.products.ProductsData;
-import com.aldo.ecommerce_challenge.products.dto.ProductUpdateDTO;
-import com.aldo.ecommerce_challenge.products.models.Product;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,18 +16,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(OrderItemController.class)
+@DisplayName("OrderItemController Tests")
 class OrderItemControllerTest {
   @Autowired private MockMvc mvc;
   @MockitoBean private OrderItemService orderItemService;

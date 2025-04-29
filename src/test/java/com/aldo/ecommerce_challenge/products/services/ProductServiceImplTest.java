@@ -21,6 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
+@DisplayName("ProductService Tests")
 class ProductServiceImplTest {
   @MockitoBean ProductRepository productRepository;
   @MockitoBean ProductMapper productMapper;

@@ -15,6 +15,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@DisplayName("ProductRepository Tests")
 public class ProductRepositoryTest {
   @Autowired ProductRepository productRepository;
   @Autowired OrderItemRepository orderItemRepository;
